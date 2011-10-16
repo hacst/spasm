@@ -50,9 +50,6 @@ void write_executable(FILE *file,
 	//
 	const uint32_t phdr_count = 3;
 	const uint32_t phdr_offset 			= sizeof(Elf32_Ehdr);
-	//const uint32_t phdr_text_offset 	= phdr_offset;
-	//const uint32_t phdr_rodata_offset 	= phdr_text_offset + sizeof(Elf32_Phdr);
-	//const uint32_t phdr_data_offset 	= phdr_rodata_offset + sizeof(Elf32_Phdr);
 	const uint32_t phdr_offset_end 		= phdr_offset + phdr_count * sizeof(Elf32_Phdr);
 
 	const uint32_t content_offset		= phdr_offset_end;
@@ -64,12 +61,6 @@ void write_executable(FILE *file,
 
 	const uint32_t shdr_count = 6;
 	const uint32_t shdr_offset 			= content_offset_end;
-	//const uint32_t shdr_null_offset		= shdr_offset;
-	//const uint32_t shdr_strtab_offset   = shdr_null_offset + sizeof(Elf32_Shdr);
-	//const uint32_t shdr_text_offset 	= shdr_strtab_offset + sizeof(Elf32_Shdr);
-	//const uint32_t shdr_rodata_offset	= shdr_text_offset + sizeof(Elf32_Shdr);
-	//const uint32_t shdr_data_offset		= shdr_rodata_offset + sizeof(Elf32_Shdr);
-	//const uint32_t shdr_offset_end		= shdr_offset + shdr_count * sizeof(Elf32_Shdr);
 
 	//
 	// Layout in virtual memory
