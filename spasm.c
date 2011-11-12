@@ -17,11 +17,41 @@
 #include <stdlib.h>
 #include <elf.h>
 #include <memory.h>
+#include <unistd.h>
+
+uint32_t padding_for(const uint32_t addr, const uint32_t alignment)
+{
+	return (!alignment || addr % alignment == 0) ? 0 : alignment - (addr % alignment);
+}
+
+size_t write_padding(const size_t size, FILE *file)
+{
+	const char zero[0x100] = {0};
+	size_t result = 0;
+	uint32_t iterations = size / sizeof(zero);
+	while (iterations)
+	{
+		result += fwrite(zero, sizeof(zero), 1, file);
+		--iterations;
+	}
+
+	const size_t left = size % sizeof(zero);
+	if (left)
+	{
+		result += fwrite(zero, left, 1, file);
+	}
+
+	return result;
+}
 
 void write_executable(FILE *file,
+		unsigned int text_vaddr,
 		const char *text, unsigned int text_size,
+		unsigned int rodata_vaddr,
 		const char *rodata, unsigned int rodata_size,
+		unsigned int data_vaddr,
 		const char *data, unsigned int data_size,
+		unsigned int bss_vaddr,
 		unsigned int bss_size)
 {
 	// Memory layout
@@ -48,28 +78,40 @@ void write_executable(FILE *file,
 	//
 	// Layout in file
 	//
-	const uint32_t phdr_count = 3;
+	const uint32_t phdr_count = 4;
 	const uint32_t phdr_offset 			= sizeof(Elf32_Ehdr);
 	const uint32_t phdr_offset_end 		= phdr_offset + phdr_count * sizeof(Elf32_Phdr);
 
 	const uint32_t content_offset		= phdr_offset_end;
-	const uint32_t text_offset 			= content_offset;
-	const uint32_t rodata_offset 		= text_offset + text_size;
-	const uint32_t data_offset 			= rodata_offset + rodata_size;
-	const uint32_t strtab_offset		= data_offset + data_size;
-	const uint32_t content_offset_end	= strtab_offset + strtab_size;
+
+	const uint32_t text_alignment		= 1<<12;
+	const uint32_t text_padding_prefix	= padding_for(content_offset, text_alignment);
+	const uint32_t text_offset 			= content_offset + text_padding_prefix;
+	const uint32_t text_end				= text_offset + text_size;
+
+	const uint32_t rodata_alignment		= 1<<12;
+	const uint32_t rodata_padding_prefix= padding_for(text_end, rodata_alignment);
+	const uint32_t rodata_offset 		= text_end + rodata_padding_prefix;
+	const uint32_t rodata_end			= rodata_offset + rodata_size;
+
+	const uint32_t data_alignment		= 1<<12;
+	const uint32_t data_padding_prefix	= padding_for(rodata_end, data_alignment);
+	const uint32_t data_offset 			= rodata_end + data_padding_prefix;
+	const uint32_t data_end				= data_offset + data_size;
+
+	const uint32_t bss_alignment		= 1<<12;
+
+	const uint32_t strtab_alignment		= 0;
+	const uint32_t strtab_padding_prefix= padding_for(data_end, strtab_alignment);
+	const uint32_t strtab_offset		= data_end + strtab_padding_prefix;
+	const uint32_t strtab_end			= strtab_offset + strtab_size;
+
+
+	const uint32_t content_offset_end	= strtab_end;
 
 	const uint32_t shdr_count = 6;
 	const uint32_t shdr_offset 			= content_offset_end;
 
-	//
-	// Layout in virtual memory
-	//
-	const uint32_t virtual_entry_addr = 0x400000;
-	const uint32_t virtual_text_addr = virtual_entry_addr;
-	const uint32_t virtual_rodata_addr = virtual_text_addr + text_size;
-	const uint32_t virtual_data_addr = virtual_rodata_addr + rodata_size;
-	const uint32_t virtual_bss_addr = virtual_data_addr + data_size;
 
 	//
 	// Elf-header
@@ -90,7 +132,7 @@ void write_executable(FILE *file,
 	ehdr.e_type 				= ET_EXEC; 		// Executable file
 	ehdr.e_machine				= EM_386;		// i386 arch
 	ehdr.e_version				= EV_CURRENT;
-	ehdr.e_entry				= virtual_entry_addr; // Entry point (virtual addr.)
+	ehdr.e_entry				= text_vaddr; // Entry point (virtual addr.)
 	ehdr.e_phoff				= phdr_offset; // Program header table offset (file offset)
 	ehdr.e_shoff				= shdr_offset; // Section header table offset (file offset)
 	ehdr.e_ehsize 				= sizeof(Elf32_Ehdr);
@@ -111,11 +153,12 @@ void write_executable(FILE *file,
 
 	phdr_text.p_type 			= PT_LOAD;
 	phdr_text.p_offset			= text_offset; // Offset to first byte of segment (file offset)
-	phdr_text.p_vaddr			= virtual_text_addr;  // Virtual address
+	phdr_text.p_vaddr			= text_vaddr;  // Virtual address
+	phdr_text.p_paddr			= 0;
+	phdr_text.p_align			= text_alignment;
 	phdr_text.p_filesz			= text_size; // Size in file image
 	phdr_text.p_memsz			= text_size; // Size in memory image
 	phdr_text.p_flags			= PF_X | PF_R; // Executable & Readable
-	phdr_text.p_align			= 0; // No alignemnt required
 
 	// .rodata segment program header
 
@@ -124,11 +167,12 @@ void write_executable(FILE *file,
 
 	phdr_rodata.p_type 			= PT_LOAD;
 	phdr_rodata.p_offset		= rodata_offset; // Offset to first byte of segment (file offset)
-	phdr_rodata.p_vaddr			= virtual_rodata_addr;  // Virtual address
+	phdr_rodata.p_vaddr			= rodata_vaddr;  // Virtual address
+	phdr_rodata.p_paddr			= 0;
+	phdr_rodata.p_align			= rodata_alignment;
 	phdr_rodata.p_filesz		= rodata_size; // Size in file image
 	phdr_rodata.p_memsz			= rodata_size; // Size in memory image
 	phdr_rodata.p_flags			= PF_R; // Read-only
-	phdr_rodata.p_align			= 0; // No alignemnt required
 
 	// .data segment program header
 
@@ -137,11 +181,26 @@ void write_executable(FILE *file,
 
 	phdr_data.p_type 			= PT_LOAD;
 	phdr_data.p_offset			= data_offset; // Offset to first byte of segment (file offset)
-	phdr_data.p_vaddr			= virtual_data_addr;  // Virtual address
+	phdr_data.p_vaddr			= data_vaddr;  // Virtual address
+	phdr_data.p_paddr			= 0;
+	phdr_data.p_align			= data_alignment;
 	phdr_data.p_filesz			= data_size; // Size in file image
 	phdr_data.p_memsz			= data_size; // Size in memory image
 	phdr_data.p_flags			= PF_R | PF_W; // Read & Write
-	phdr_data.p_align			= 0; // No alignemnt required
+
+	// .bss segment program header
+
+	Elf32_Phdr phdr_bss;
+	memset(&phdr_bss, 0, sizeof(Elf32_Phdr));
+
+	phdr_bss.p_type 			= PT_LOAD;
+	phdr_bss.p_offset			= 0; // Offset to first byte of segment (file offset)
+	phdr_bss.p_vaddr			= bss_vaddr;  // Virtual address
+	phdr_bss.p_paddr			= 0;
+	phdr_bss.p_align			= bss_alignment;
+	phdr_bss.p_filesz			= 0; // Size in file image
+	phdr_bss.p_memsz			= bss_size; // Size in memory image
+	phdr_bss.p_flags			= PF_R | PF_W; // Read & Write
 
 	//
 	// Elf segment headers
@@ -161,6 +220,7 @@ void write_executable(FILE *file,
 	shdr_strtab.sh_type 		= SHT_STRTAB;
 	shdr_strtab.sh_flags		= 0;
 	shdr_strtab.sh_addr			= 0; // Not loaded into virtual space
+	shdr_strtab.sh_addralign	= strtab_alignment;
 	shdr_strtab.sh_offset		= strtab_offset;
 	shdr_strtab.sh_size			= strtab_size;
 
@@ -172,7 +232,8 @@ void write_executable(FILE *file,
 	shdr_text.sh_name 			= strtab_text_index; // Offset into naming table
 	shdr_text.sh_type 			= SHT_PROGBITS;
 	shdr_text.sh_flags			= SHF_ALLOC | SHF_EXECINSTR;
-	shdr_text.sh_addr			= virtual_text_addr;
+	shdr_text.sh_addr			= text_vaddr;
+	shdr_text.sh_addralign		= text_alignment;
 	shdr_text.sh_offset			= text_offset;
 	shdr_text.sh_size			= text_size;
 
@@ -184,7 +245,8 @@ void write_executable(FILE *file,
 	shdr_rodata.sh_name 		= strtab_rodata_index; // Offset into naming table
 	shdr_rodata.sh_type 		= SHT_PROGBITS;
 	shdr_rodata.sh_flags		= SHF_ALLOC;
-	shdr_rodata.sh_addr			= virtual_rodata_addr;
+	shdr_rodata.sh_addr			= rodata_vaddr;
+	shdr_rodata.sh_addralign	= rodata_alignment;
 	shdr_rodata.sh_offset		= rodata_offset;
 	shdr_rodata.sh_size			= rodata_size;
 
@@ -196,7 +258,8 @@ void write_executable(FILE *file,
 	shdr_data.sh_name 			= strtab_data_index; // Offset into naming table
 	shdr_data.sh_type 			= SHT_PROGBITS;
 	shdr_data.sh_flags			= SHF_ALLOC | SHF_WRITE;
-	shdr_data.sh_addr			= virtual_data_addr;
+	shdr_data.sh_addr			= data_vaddr;
+	shdr_data.sh_addralign		= data_alignment;
 	shdr_data.sh_offset			= data_offset;
 	shdr_data.sh_size			= data_size;
 
@@ -208,7 +271,8 @@ void write_executable(FILE *file,
 	shdr_bss.sh_name 			= strtab_bss_index; // Offset into naming table
 	shdr_bss.sh_type 			= SHT_NOBITS;
 	shdr_bss.sh_flags			= SHF_ALLOC | SHF_WRITE;
-	shdr_bss.sh_addr			= virtual_bss_addr;
+	shdr_bss.sh_addr			= bss_vaddr;
+	shdr_bss.sh_addralign		= bss_alignment;
 	shdr_bss.sh_offset			= 0;
 	shdr_bss.sh_size			= bss_size;
 
@@ -224,10 +288,18 @@ void write_executable(FILE *file,
 	fwrite(&phdr_text, sizeof(phdr_text), 1, file);
 	fwrite(&phdr_rodata, sizeof(phdr_rodata), 1, file);
 	fwrite(&phdr_data, sizeof(phdr_data), 1, file);
+	fwrite(&phdr_bss, sizeof(phdr_bss), 1, file);
 
+	write_padding(text_padding_prefix, file);
 	fwrite(text, text_size, 1, file);
+
+	write_padding(rodata_padding_prefix, file);
 	fwrite(rodata, rodata_size, 1, file);
+
+	write_padding(data_padding_prefix, file);
 	fwrite(data, data_size, 1, file);
+
+	write_padding(strtab_padding_prefix, file);
 	fwrite(strtab, strtab_size, 1, file);
 
 	fwrite(&shdr_null, sizeof(shdr_null), 1, file);
@@ -239,15 +311,29 @@ void write_executable(FILE *file,
 }
 
 int main(void) {
-	const char text[] = "Code here.";
-	const char rodata[] = "Read only goes here.";
-	const char data[] = "Data goes here.";
+	const char rodata[] = "Hello World.\n";
+
+	const char text[] = {	0xba, 0x0e, 0x00, 0x00, 0x00,	// mov    edx,0xc
+							0xb9, 0x00, 0x00, 0x09, 0x10,   // mov    ecx,0x10090000
+							0xbb, 0x01, 0x00, 0x00, 0x00,   // mov    ebx,0x1
+							0xb8, 0x04, 0x00, 0x00, 0x00,   // mov    eax,0x4
+							0xcd, 0x80,		               	// int    0x80
+							0xbb, 0x00, 0x00, 0x00, 0x00,   // mov    ebx,0x0
+							0xb8, 0x01, 0x00, 0x00, 0x00,   // mov    eax,0x1
+							0xcd, 0x80 };	               	// int    0x80
+
+
+	const char data[] = "jajajaj";
 	FILE *file = fopen("test.bin", "wb");
 	write_executable(file,
+			0x08048000,
 			text, sizeof(text),
+			0x10090000,
 			rodata, sizeof(rodata),
+			0x180D8000,
 			data, sizeof(data),
-			0);
+			0x20120000,
+			1);
 	fclose(file);
 
 	return EXIT_SUCCESS;
