@@ -18,10 +18,26 @@
 #include <elf.h>
 #include <memory.h>
 #include <unistd.h>
+#include <assert.h>
 
-uint32_t padding_for(const uint32_t addr, const uint32_t alignment)
+/**
+ * @brief Creates a padding for the given addr. that ensures that (addr. + padding - reference) % alignment == 0
+ * @param addr Addr. to create padding for
+ * @param reference Reference to align relative to
+ * @param alignment Alignment (Must be bigger 0 and power of two)
+ */
+uint32_t padding_for(const uint32_t addr, const uint32_t reference, const uint32_t alignment)
 {
-	return (!alignment || addr % alignment == 0) ? 0 : alignment - (addr % alignment);
+	const uint32_t mask = alignment - 1;
+	const uint32_t addr_end = addr & mask;
+	const uint32_t ref_end = reference & mask;
+
+	if (addr_end < ref_end)
+		return ref_end - addr_end;
+	else if (addr_end > ref_end)
+		return alignment - addr_end + ref_end;
+
+	return 0;
 }
 
 size_t write_padding(const size_t size, FILE *file)
@@ -44,6 +60,21 @@ size_t write_padding(const size_t size, FILE *file)
 	return result;
 }
 
+/**
+ *  @brief Writes ELF executable with the given parameters to the given file.
+ *  @param file File to write to
+ *  @param text_vaddr Address to load .text segment to
+ *  @param text Code to write
+ *  @param text_size Size of the given code
+ *  @param rodata_vaddr Address to load .rodata segment to
+ *  @param rodata Read only data to write
+ *  @param rodata_size Size of the given read only data
+ *  @param data_vaddr Address to load .data segment to
+ *  @param data Writable data to write (== initialized variables)
+ *  @param data_size Size of the given writable data
+ *  @param bss_vaddr Address to put the zero initialized writable segment at (== 0 initialized variables)
+ *  @param bss_size Size to reserve for the zero initialized data
+ */
 void write_executable(FILE *file,
 		unsigned int text_vaddr,
 		const char *text, unsigned int text_size,
@@ -85,24 +116,24 @@ void write_executable(FILE *file,
 	const uint32_t content_offset		= phdr_offset_end;
 
 	const uint32_t text_alignment		= 1<<12;
-	const uint32_t text_padding_prefix	= padding_for(content_offset, text_alignment);
+	const uint32_t text_padding_prefix	= padding_for(content_offset, text_vaddr, text_alignment);
 	const uint32_t text_offset 			= content_offset + text_padding_prefix;
 	const uint32_t text_end				= text_offset + text_size;
 
 	const uint32_t rodata_alignment		= 1<<12;
-	const uint32_t rodata_padding_prefix= padding_for(text_end, rodata_alignment);
+	const uint32_t rodata_padding_prefix= padding_for(text_end, rodata_vaddr, rodata_alignment);
 	const uint32_t rodata_offset 		= text_end + rodata_padding_prefix;
 	const uint32_t rodata_end			= rodata_offset + rodata_size;
 
 	const uint32_t data_alignment		= 1<<12;
-	const uint32_t data_padding_prefix	= padding_for(rodata_end, data_alignment);
+	const uint32_t data_padding_prefix	= padding_for(rodata_end, data_vaddr, data_alignment);
 	const uint32_t data_offset 			= rodata_end + data_padding_prefix;
 	const uint32_t data_end				= data_offset + data_size;
 
 	const uint32_t bss_alignment		= 1<<12;
 
 	const uint32_t strtab_alignment		= 0;
-	const uint32_t strtab_padding_prefix= padding_for(data_end, strtab_alignment);
+	const uint32_t strtab_padding_prefix= 0;
 	const uint32_t strtab_offset		= data_end + strtab_padding_prefix;
 	const uint32_t strtab_end			= strtab_offset + strtab_size;
 
