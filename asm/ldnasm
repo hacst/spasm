@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+nasm -f elf $1
+ld -m elf_i386 `basename $1 .asm`.o -o `basename $1 .asm`
+
