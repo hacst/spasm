@@ -2,17 +2,17 @@ bits 32
 
 section .data
 prompt:	db "> "
-promptlen: equ $-prompt
+.len: equ $-prompt
 
 nanm: db "Invalid input. Please enter an unsigned integer.", 10
-nanmlen: equ $-nanm
+.len: equ $-nanm
 
 ofm: db "Number too large. Must be smaller than 2^32.", 10
-ofmlen: equ $-ofm
+.len: equ $-ofm
 
 section .bss
 strbuf: resb 255
-strbuflen: equ $-strbuf
+.len: equ $-strbuf
 
 section .text
 global _start
@@ -35,14 +35,14 @@ readunsigned:
 mov eax, 4 ; sys_write
 mov ebx, 1 ; stdout
 mov ecx, prompt
-mov edx, promptlen
+mov edx, prompt.len
 int 80h
 
 ; Read input from stdin
 mov eax, 3 ; sys_read
 mov ebx, 0 ; stdin
 mov ecx, strbuf
-mov edx, strbuflen
+mov edx, strbuf.len
 int 80h
 ; eax contains number of characters in strbuf
 
@@ -56,45 +56,45 @@ xor eax, eax ; Number will be parsed into this register
 xor ebx, ebx ; We will only write to the lower byte of ebx
 mov edi , 10
 
-parse:
+.parse:
 mov bl, byte [esi]
 
 cmp bl, 10 ; Return
-je done
+je .done
 cmp bl, '0'
-jl errnan
+jl .errnan
 cmp bl, '9'
-jg errnan
+jg .errnan
 
 sub bl, '0'
 
 mul edi ; mul eax, 10
-jo overflow
+jo .overflow
 add eax, ebx
-jc overflow
+jc .overflow
 
 inc esi
-jmp parse
+jmp .parse
 
-overflow:
+.overflow:
 mov eax, 4
 mov ebx, 1
 mov ecx, ofm
-mov edx, ofmlen
+mov edx, ofm.len
 int 80h
 
 jmp readunsigned
 
-errnan:
+.errnan:
 mov eax, 4
 mov ebx, 1
 mov ecx, nanm
-mov edx, nanmlen
+mov edx, nanm.len
 int 80h
 
 jmp readunsigned
 
-done:
+.done:
 
 ret
 
@@ -102,13 +102,13 @@ ret
 ; Parameter: eax - Value to write to stdout
 ; Used registers: eax, ebx, ecx, edx, esi
 writeunsigned:
-mov esi, strbuf + strbuflen ; Use edi as pointer to current string position (writing back to front)
+mov esi, strbuf + strbuf.len ; Use edi as pointer to current string position (writing back to front)
 mov ebx, 10
 
 mov [esi], byte 10 ; Newline at end of number
 dec esi
 
-generate:
+.generate:
 xor edx, edx
 div ebx ; div 10
 
@@ -119,7 +119,7 @@ mov [esi], dl
 dec esi
 
 cmp eax, 0
-jnz generate
+jnz .generate
 
 ; Output result
 mov eax, 4
