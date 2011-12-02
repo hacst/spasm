@@ -1,6 +1,6 @@
 bits 32
 
-section .data
+section .rodata
 prompt:	db "> "
 .len: equ $-prompt
 
@@ -15,15 +15,6 @@ strbuf: resb 255
 .len: equ $-strbuf
 
 section .text
-global _start
-_start:
-
-call readunsigned
-call writeunsigned
-
-mov ebx, 0 
-mov eax, 1
-int 80h
 
 ; Function for reading an unsigned integer value from stdin.
 ; Used registers: eax, ebx, ecx, edx, esi, edi
