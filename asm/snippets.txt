@@ -1,0 +1,2 @@
+readelf -x .text testuintio | ./rehex2sh.py
+./ldnasmp testuintio.asm 0x08048080 0x10000000 0x15000000 0x20000000

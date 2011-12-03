@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+nasm -f elf $1
+ld -m elf_i386 -Ttext $2 --section-start=.rodata=$3 -Tdata $4 -Tbss $5 `basename $1 .asm`.o -o `basename $1 .asm`
+
