@@ -76,6 +76,7 @@ size_t write_padding(const size_t size, FILE *file)
 
 
 void elf_write(FILE *file,
+        unsigned int entry_point,
         unsigned int text_vaddr,
         const unsigned char *text, size_t text_size,
         unsigned int rodata_vaddr,
@@ -174,7 +175,7 @@ void elf_write(FILE *file,
     ehdr.e_type                 = ET_EXEC;         /* Executable file */
     ehdr.e_machine              = EM_386;          /* i386 arch */
     ehdr.e_version              = EV_CURRENT;
-    ehdr.e_entry                = text_vaddr;      /* Entry point (virtual addr.) */
+    ehdr.e_entry                = entry_point;      /* Entry point (virtual addr.) */
     ehdr.e_phoff                = phdr_offset;     /* Program header table offset (file offset) */
     ehdr.e_shoff                = shdr_offset;     /* Section header table offset (file offset) */
     ehdr.e_ehsize               = sizeof(Elf32_Ehdr);

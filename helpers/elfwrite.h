@@ -28,6 +28,7 @@
 /**
  *  @brief Writes an ELF executable with the given parameters to the given file.
  *  @param file File to write to
+ *  @param entry_point Virtual address of entry point
  *  @param text_vaddr Address to load .text segment to
  *  @param text Code to write
  *  @param text_size Size of the given code
@@ -41,6 +42,7 @@
  *  @param bss_size Size to reserve for the zero initialized data
  */
 void elf_write(FILE *file,
+        unsigned int entry_point,
         unsigned int text_vaddr,
         const unsigned char *text, size_t text_size,
         unsigned int rodata_vaddr,

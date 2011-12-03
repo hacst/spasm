@@ -43,6 +43,7 @@ int main(void) {
 
     elf_write(file,
             0x080480B4,
+            0x080480B4,
             text, sizeof(text),
             0x100900D6,
             rodata, sizeof(rodata),
