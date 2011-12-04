@@ -1,0 +1,23 @@
+DS $n 1
+DS $m 3
+LC 3
+LC 4
+ADD
+LA $n
+STR
+LC 3
+LA $n
+LV
+LC 0
+LC 5
+SUB
+SUB
+MUL
+LA $n
+STR
+LA $n
+LV
+PRI
+NOP
+STP
+

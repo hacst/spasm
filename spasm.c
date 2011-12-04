@@ -22,9 +22,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "spasm_parser.h"
 #include "helpers/elfwrite.h"
 
-int main(void) {
+
+int main(int argn, char **argv) {
     const unsigned char rodata[] = {
             0x3e, 0x20, 0x49, 0x6e, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x20,
             0x69, 0x6e, 0x70, 0x75, 0x74, 0x2e, 0x20, 0x50, 0x6c, 0x65,
@@ -67,9 +70,73 @@ int main(void) {
 
     const unsigned char data[] = "Nothing useful here";
 
-    FILE *file = fopen("test.bin", "wb");
+    FILE *source;
+    FILE *target;
+    ParserState parser;
+    Command *cmd;
+    MemoryLocation *mem;
+    Label *lbl;
+    Errc result;
 
-    elf_write(file,
+    if (argn < 3)
+    {
+        fprintf(stderr, "Usage:\n"
+               "    %s [source] [target]\n", argv[0]);
+        return EXIT_FAILURE;
+    }
+
+    source = fopen(argv[1], "r");
+    if (!source)
+    {
+        fprintf(stderr, "Failed to open source file \"%s\"\n", argv[1]);
+        return EXIT_FAILURE;
+    }
+
+    init_parser(&parser);
+    result = parse_file(&parser, source);
+    if (result != ERR_SUCCESS)
+    {
+        fprintf(stderr, "Failed to parse source file, reason: %s line %u\n",
+                SPASM_ERR_STR[result], parser.last_line);
+
+        cleanup_parser(&parser);
+        return EXIT_FAILURE;
+    }
+
+    printf("Variables:\n");
+    mem = parser.memory_location_first;
+    while (mem)
+    {
+        printf("%i $%s %i\n", mem->source_line, mem->name, mem->size);
+        mem = mem->next;
+    }
+    printf("Commands:\n");
+    cmd = parser.command_first;
+    while (cmd)
+    {
+        printf("%i %s\n", cmd->source_line, SPASM_MNEMONICS[cmd->type]);
+        cmd = cmd->next;
+    }
+
+    printf("Labels:\n");
+    lbl = parser.label_first;
+    while (lbl)
+    {
+        printf("%i %s\n", lbl->command->source_line, lbl->name);
+        lbl = lbl->next;
+    }
+
+    cleanup_parser(&parser);
+    fclose(source);
+
+    target = fopen(argv[2], "wb");
+    if (!target)
+    {
+        fprintf(stderr, "Failed to open target file \"%s\"\n", argv[2]);
+        return EXIT_FAILURE;
+    }
+
+    elf_write(target,
             0x8048148,
             0x08048080,
             text, sizeof(text),
@@ -80,7 +147,7 @@ int main(void) {
             0x20000000,
             0x100);
 
-    fclose(file);
+    fclose(target);
 
     return EXIT_SUCCESS;
 }
