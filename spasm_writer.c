@@ -20,6 +20,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #include "spasm_writer.h"
+#include "spasm_commands.h"
 
 Errc write_program(const ParserState *parser, FILE *file)
 {

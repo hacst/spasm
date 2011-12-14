@@ -42,6 +42,10 @@ def parse(lines, prefix):
 def generateCShellCode(sections, header = False, commentindent = 40, ):
     result = ""
     for section, codes in sections.iteritems():
+        
+        if header:
+            result += "extern "
+            
         result += "const unsigned char " + section + "[]"
         
         if header:
