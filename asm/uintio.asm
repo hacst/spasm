@@ -14,7 +14,7 @@ section .bss
 strbuf: resb 255
 .len: equ $-strbuf
 
-section .text
+section .spasm_readunsigned
 
 ; Function for reading an unsigned integer value from stdin.
 ; Used registers: eax, ebx, ecx, edx, esi, edi
@@ -89,11 +89,12 @@ jmp readunsigned
 
 ret
 
+section .spasm_writeunsigned
 ; Function for writing an unsigned integer to stdout.
 ; Parameter: eax - Value to write to stdout
 ; Used registers: eax, ebx, ecx, edx, esi
 writeunsigned:
-mov esi, strbuf + strbuf.len ; Use edi as pointer to current string position (writing back to front)
+mov esi, strbuf + strbuf.len - 1 ; Use edi as pointer to current string position (writing back to front)
 mov ebx, 10
 
 mov [esi], byte 10 ; Newline at end of number
@@ -112,12 +113,14 @@ dec esi
 cmp eax, 0
 jnz .generate
 
+inc esi
+
 ; Output result
 mov eax, 4
 mov ebx, 1
 mov ecx, esi
-mov edx, esi
-sub edx, strbuf
+mov edx, strbuf + strbuf.len
+sub edx, esi
 int 80h
 
 ret

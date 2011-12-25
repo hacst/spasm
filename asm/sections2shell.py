@@ -43,10 +43,14 @@ def generateCShellCode(sections, header = False, commentindent = 40, ):
     result = ""
     for section, codes in sections.iteritems():
         
+        bcount = 0
+        for (bytes, comment) in codes:
+            bcount = bcount + len(bytes)
+            
         if header:
             result += "extern "
             
-        result += "const unsigned char " + section + "[]"
+        result += "const unsigned char " + section + "[" + str(bcount) + "]"
         
         if header:
             result += ";\n"

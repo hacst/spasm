@@ -62,5 +62,8 @@ const char SPASM_ERR_STR[][128] = {
         "ERR_LABEL_REDEFINITION",
         "ERR_CONSTANT_RANGE",
         "ERR_INVALID_MNEMONIC",
-        "ERR_NO_COMMANDS"
+        "ERR_NO_COMMANDS",
+
+        "ERR_WRITE",
+        "ERR_INTERNAL",
 };

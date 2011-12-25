@@ -27,9 +27,6 @@
 #ifndef SPASM_WRITER_H_
 #define SPASM_WRITER_H_
 
-Errc write_program(const ParserState *parser, FILE *file);
-Errc write_command(const Command *cmd, FILE *file);
-
-Errc write_jmp(FILE *file, uint32_t vaddr);
+Errc write_program(ParserState *parser, FILE *file);
 
 #endif /* SPASM_WRITER_H_ */

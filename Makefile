@@ -10,7 +10,7 @@ MODULES = spasm
 
 all : $(MODULES)
 
-spasm: spasm.c spasm_parser.c spasm_writer.c spasm_types.c spasm_commands.h helpers/elfwrite.c
+spasm: spasm_types.c spasm_writer.c spasm_parser.c spasm_commands.c helpers/elfwrite.c spasm.c
 	$(C) $(CFLAGS) -o $@ $^
 
 clean:
