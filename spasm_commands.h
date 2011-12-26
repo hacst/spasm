@@ -30,22 +30,23 @@ extern const unsigned char spasm_jin[9];
 extern const unsigned char spasm_add[5];
 extern const unsigned char spasm_and[5];
 extern const unsigned char spasm_str[4];
-extern const unsigned char spasm_mul[5];
+extern const unsigned char spasm_mul[6];
 extern const unsigned char spasm_jmp[5];
 extern const unsigned char spasm_stp[9];
 extern const unsigned char spasm_pri[6];
 extern const unsigned char spasm_les[12];
 extern const unsigned char spasm_lv[3];
-extern const unsigned char spasm_sub[9];
+extern const unsigned char spasm_sub[5];
 extern const unsigned char spasm_not[5];
 extern const unsigned char spasm_lc[5];
 extern const unsigned char spasm_la[5];
 extern const unsigned char spasm_rea[6];
 extern const unsigned char spasm_div[7];
 extern const unsigned char spasm_equ[12];
-extern const unsigned char spasm_readunsigned[148];
-extern const unsigned char spasm_writeunsigned[52];
-extern const unsigned char spasm_rodata[96];
+
+extern const unsigned char spasm_readint32[160];
+extern const unsigned char spasm_writeint32[71];
+extern const unsigned char spasm_rodata[94];
 
 extern const uint32_t spasm_bss_usage;
 

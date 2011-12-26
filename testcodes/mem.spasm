@@ -1,0 +1,29 @@
+DS $test 1
+
+LC 1
+PRI
+
+LC 2
+PRI
+
+LC 3
+LA $test
+STR
+
+LC 4
+
+LA $test
+LV
+PRI ; $test (= 3)
+
+REA
+PRI
+
+LA $test
+LV
+LC 1
+ADD
+PRI ; $test + 1 (= 4)
+
+STP
+

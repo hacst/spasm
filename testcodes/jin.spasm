@@ -1,0 +1,18 @@
+LC 1
+JIN #m1
+LC 0
+PRI
+
+#m1 LC 0
+JIN #m2
+LC 666  ; Error
+PRI
+
+#m2 LC 1
+PRI
+STP
+
+; Prints:
+; 0
+; 1
+

@@ -120,7 +120,7 @@ Errc write_command(const Command *command, unsigned char **buffer)
     case SPASM_PRI:
         return write_raw_command_with_uint32_data(
                 spasm_pri, sizeof(spasm_pri), 2,
-                (uint32_t)((int32_t)(0x08048080 + sizeof(spasm_readunsigned)) - (int32_t)(command->vaddr + 2 + 4)),
+                (uint32_t)((int32_t)(0x08048080 + sizeof(spasm_readint32)) - (int32_t)(command->vaddr + 2 + 4)),
                 buffer);
     case SPASM_JMP:
         return write_raw_command_with_uint32_data(
@@ -241,12 +241,12 @@ Errc write_program(ParserState *parser, FILE *file)
     const uint32_t bss_vaddr_base = 0x25000000;
 
     const size_t text_size = update_parser_state_vaddr_info(parser,
-            text_vaddr_base +  sizeof(spasm_readunsigned) + sizeof(spasm_writeunsigned),
+            text_vaddr_base +  sizeof(spasm_readint32) + sizeof(spasm_writeint32),
             bss_vaddr_base + spasm_bss_usage,
             rodata_vaddr_base + sizeof(spasm_rodata),
             data_vaddr_base)
-            + sizeof(spasm_readunsigned)
-            + sizeof(spasm_writeunsigned);
+            + sizeof(spasm_readint32)
+            + sizeof(spasm_writeint32);
 
     unsigned char *text_buffer = malloc(text_size);
     unsigned char *rodata_buffer = malloc(parser->rodata_used + sizeof(spasm_rodata));
@@ -260,10 +260,10 @@ Errc write_program(ParserState *parser, FILE *file)
         return ERR_ALLOC;
 
 
-    memcpy(text_buffer, spasm_readunsigned, sizeof(spasm_readunsigned));
-    memcpy(text_buffer + sizeof(spasm_readunsigned), spasm_writeunsigned, sizeof(spasm_writeunsigned));
+    memcpy(text_buffer, spasm_readint32, sizeof(spasm_readint32));
+    memcpy(text_buffer + sizeof(spasm_readint32), spasm_writeint32, sizeof(spasm_writeint32));
 
-    result = write_text(parser, text_buffer + sizeof(spasm_readunsigned) + sizeof(spasm_writeunsigned));
+    result = write_text(parser, text_buffer + sizeof(spasm_readint32) + sizeof(spasm_writeint32));
     if (result != ERR_SUCCESS)
         goto cleanup;
 
@@ -274,7 +274,7 @@ Errc write_program(ParserState *parser, FILE *file)
         goto cleanup;
 
     elf_write(file,
-            text_vaddr_base  +  sizeof(spasm_readunsigned) + sizeof(spasm_writeunsigned),
+            text_vaddr_base  +  sizeof(spasm_readint32) + sizeof(spasm_writeint32),
             text_vaddr_base, text_buffer, text_size,
             rodata_vaddr_base, rodata_buffer, parser->rodata_used + sizeof(spasm_rodata),
             data_vaddr_base, data_buffer, parser->data_used,

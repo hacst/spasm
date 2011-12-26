@@ -1,0 +1,14 @@
+DS $test 1
+REA
+LC 1
+LA $test
+STR
+LA $test
+LV
+ADD
+PRI
+LA $test
+LV
+PRI
+STP
+

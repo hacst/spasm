@@ -1,0 +1,7 @@
+#mark NOP
+LC 1
+PRI
+JMP #mark2
+JMP #mark
+#mark2 NOP
+STP

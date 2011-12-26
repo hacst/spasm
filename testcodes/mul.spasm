@@ -1,0 +1,32 @@
+LC 0
+LC 100
+MUL
+PRI
+
+LC 1
+LC 100
+MUL
+PRI
+
+LC 3
+LC 7
+MUL
+PRI
+
+LC 10
+LC 0
+LC 1
+SUB
+MUL
+PRI ; 10 * -1 = -10
+
+LC 0
+LC 100
+SUB
+LC 0
+LC 10
+SUB
+MUL
+PRI ; -100 * -10 = 1000
+
+STP

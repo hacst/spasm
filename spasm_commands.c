@@ -31,7 +31,7 @@ const unsigned char spasm_jin[9] = {
                                         /* spasm_jin: */
     0x58,                               /* pop    eax */
     0x21, 0xc0,                         /* and    eax,eax */
-    0xf, 0x84, 0xca, 0x3d, 0xa9, 0xd6,  /* je     deadbeaf <_end+0xd6a92dbf> */
+    0xf, 0x84, 0xcb, 0x3d, 0xa9, 0xd6,  /* je     deadbeaf <_end+0xd6a92dbf> */
 };
 
 const unsigned char spasm_add[5] = {
@@ -57,17 +57,17 @@ const unsigned char spasm_str[4] = {
     0x89, 0x18,                         /* mov    DWORD PTR [eax],ebx */
 };
 
-const unsigned char spasm_mul[5] = {
+const unsigned char spasm_mul[6] = {
                                         /* spasm_mul: */
     0x5b,                               /* pop    ebx */
     0x58,                               /* pop    eax */
-    0xf7, 0xe3,                         /* mul    ebx */
+    0xf, 0xaf, 0xc3,                    /* imul   eax,ebx */
     0x50,                               /* push   eax */
 };
 
 const unsigned char spasm_jmp[5] = {
                                         /* spasm_jmp: */
-    0xe9, 0xd3, 0x3d, 0xa9, 0xd6,       /* jmp    deadbeaf <_end+0xd6a92dbf> */
+    0xe9, 0xd4, 0x3d, 0xa9, 0xd6,       /* jmp    deadbeaf <_end+0xd6a92dbf> */
 };
 
 const unsigned char spasm_stp[9] = {
@@ -80,7 +80,7 @@ const unsigned char spasm_stp[9] = {
 const unsigned char spasm_pri[6] = {
                                         /* spasm_pri: */
     0x58,                               /* pop    eax */
-    0xe8, 0xde, 0x3d, 0xa9, 0xd6,       /* call   deadbeaf <_end+0xd6a92dbf> */
+    0xe8, 0xdf, 0x3d, 0xa9, 0xd6,       /* call   deadbeaf <_end+0xd6a92dbf> */
 };
 
 const unsigned char spasm_les[12] = {
@@ -88,9 +88,9 @@ const unsigned char spasm_les[12] = {
     0x5b,                               /* pop    ebx */
     0x58,                               /* pop    eax */
     0x39, 0xd8,                         /* cmp    eax,ebx */
-    0x72, 0x4,                          /* jb     80480a2 <spasm_les.less> */
+    0x7c, 0x4,                          /* jl     80480a1 <spasm_les.less> */
     0x6a, 0x0,                          /* push   0x0 */
-    0xeb, 0x2,                          /* jmp    80480a4 <spasm_les.done> */
+    0xeb, 0x2,                          /* jmp    80480a3 <spasm_les.done> */
                                         /* spasm_les.less: */
     0x6a, 0x1,                          /* push   0x1 */
 };
@@ -101,14 +101,11 @@ const unsigned char spasm_lv[3] = {
     0xff, 0x30,                         /* push   DWORD PTR [eax] */
 };
 
-const unsigned char spasm_sub[9] = {
+const unsigned char spasm_sub[5] = {
                                         /* spasm_sub: */
     0x5b,                               /* pop    ebx */
     0x58,                               /* pop    eax */
     0x29, 0xd8,                         /* sub    eax,ebx */
-    0x73, 0x2,                          /* jae    8048092 <spasm_sub.done> */
-    0x31, 0xc0,                         /* xor    eax,eax */
-                                        /* spasm_sub.done: */
     0x50,                               /* push   eax */
 };
 
@@ -131,7 +128,7 @@ const unsigned char spasm_la[5] = {
 
 const unsigned char spasm_rea[6] = {
                                         /* spasm_rea: */
-    0xe8, 0xd9, 0x3d, 0xa9, 0xd6,       /* call   deadbeaf <_end+0xd6a92dbf> */
+    0xe8, 0xda, 0x3d, 0xa9, 0xd6,       /* call   deadbeaf <_end+0xd6a92dbf> */
     0x50,                               /* push   eax */
 };
 
@@ -140,7 +137,7 @@ const unsigned char spasm_div[7] = {
     0x5b,                               /* pop    ebx */
     0x58,                               /* pop    eax */
     0x31, 0xd2,                         /* xor    edx,edx */
-    0xf7, 0xf3,                         /* div    ebx */
+    0xf7, 0xfb,                         /* idiv   ebx */
     0x50,                               /* push   eax */
 };
 
@@ -149,15 +146,15 @@ const unsigned char spasm_equ[12] = {
     0x5b,                               /* pop    ebx */
     0x58,                               /* pop    eax */
     0x39, 0xd8,                         /* cmp    eax,ebx */
-    0x74, 0x4,                          /* je     80480b3 <spasm_equ.equal> */
+    0x74, 0x4,                          /* je     80480b2 <spasm_equ.equal> */
     0x6a, 0x0,                          /* push   0x0 */
-    0xeb, 0x2,                          /* jmp    80480b5 <spasm_equ.done> */
+    0xeb, 0x2,                          /* jmp    80480b4 <spasm_equ.done> */
                                         /* spasm_equ.equal: */
     0x6a, 0x1,                          /* push   0x1 */
 };
 
-const unsigned char spasm_readunsigned[148] = {
-                                        /* readunsigned: */
+const unsigned char spasm_readint32[160] = {
+                                        /* readint32: */
     0xb8, 0x4, 0x0, 0x0, 0x0,           /* mov    eax,0x4 */
     0xbb, 0x1, 0x0, 0x0, 0x0,           /* mov    ebx,0x1 */
     0xb9, 0x0, 0x0, 0x0, 0x15,          /* mov    ecx,0x15000000 */
@@ -169,51 +166,65 @@ const unsigned char spasm_readunsigned[148] = {
     0xba, 0xff, 0x0, 0x0, 0x0,          /* mov    edx,0xff */
     0xcd, 0x80,                         /* int    0x80 */
     0x83, 0xf8, 0x1,                    /* cmp    eax,0x1 */
-    0x74, 0xcf,                         /* je     15000060 <readunsigned> */
+    0x74, 0xcf,                         /* je     1500005e <readint32> */
     0xbe, 0x0, 0x0, 0x0, 0x25,          /* mov    esi,0x25000000 */
     0x1, 0xf0,                          /* add    eax,esi */
+    0x31, 0xff,                         /* xor    edi,edi */
+    0x80, 0x3e, 0x2d,                   /* cmp    BYTE PTR [esi],0x2d */
+    0x75, 0x3,                          /* jne    150000a0 <readint32.positive> */
+    0x46,                               /* inc    esi */
+    0xf7, 0xd7,                         /* not    edi */
+                                        /* readint32.positive: */
     0x31, 0xc0,                         /* xor    eax,eax */
     0x31, 0xdb,                         /* xor    ebx,ebx */
-    0xbf, 0xa, 0x0, 0x0, 0x0,           /* mov    edi,0xa */
-                                        /* readunsigned.parse: */
+                                        /* readint32.parse: */
     0x8a, 0x1e,                         /* mov    bl,BYTE PTR [esi] */
     0x80, 0xfb, 0xa,                    /* cmp    bl,0xa */
-    0x74, 0x4b,                         /* je     150000f3 <readunsigned.done> */
+    0x74, 0x4c,                         /* je     150000f7 <readint32.done> */
     0x80, 0xfb, 0x30,                   /* cmp    bl,0x30 */
-    0x7c, 0x2b,                         /* jl     150000d8 <readunsigned.errnan> */
+    0x7c, 0x2c,                         /* jl     150000dc <readint32.errnan> */
     0x80, 0xfb, 0x39,                   /* cmp    bl,0x39 */
-    0x7f, 0x26,                         /* jg     150000d8 <readunsigned.errnan> */
+    0x7f, 0x27,                         /* jg     150000dc <readint32.errnan> */
     0x80, 0xeb, 0x30,                   /* sub    bl,0x30 */
-    0xf7, 0xe7,                         /* mul    edi */
-    0x70, 0x7,                          /* jo     150000c0 <readunsigned.overflow> */
+    0x6b, 0xc0, 0xa,                    /* imul   eax,eax,0xa */
+    0x70, 0x7,                          /* jo     150000c4 <readint32.overflow> */
     0x1, 0xd8,                          /* add    eax,ebx */
-    0x72, 0x3,                          /* jb     150000c0 <readunsigned.overflow> */
+    0x70, 0x3,                          /* jo     150000c4 <readint32.overflow> */
     0x46,                               /* inc    esi */
-    0xeb, 0xe1,                         /* jmp    150000a1 <readunsigned.parse> */
-                                        /* readunsigned.overflow: */
+    0xeb, 0xe0,                         /* jmp    150000a4 <readint32.parse> */
+                                        /* readint32.overflow: */
     0xb8, 0x4, 0x0, 0x0, 0x0,           /* mov    eax,0x4 */
     0xbb, 0x1, 0x0, 0x0, 0x0,           /* mov    ebx,0x1 */
-    0xb9, 0x33, 0x0, 0x0, 0x15,         /* mov    ecx,0x15000033 */
-    0xba, 0x2d, 0x0, 0x0, 0x0,          /* mov    edx,0x2d */
+    0xb9, 0x2a, 0x0, 0x0, 0x15,         /* mov    ecx,0x1500002a */
+    0xba, 0x34, 0x0, 0x0, 0x0,          /* mov    edx,0x34 */
     0xcd, 0x80,                         /* int    0x80 */
-    0xeb, 0x88,                         /* jmp    15000060 <readunsigned> */
-                                        /* readunsigned.errnan: */
+    0xeb, 0x82,                         /* jmp    1500005e <readint32> */
+                                        /* readint32.errnan: */
     0xb8, 0x4, 0x0, 0x0, 0x0,           /* mov    eax,0x4 */
     0xbb, 0x1, 0x0, 0x0, 0x0,           /* mov    ebx,0x1 */
     0xb9, 0x2, 0x0, 0x0, 0x15,          /* mov    ecx,0x15000002 */
-    0xba, 0x31, 0x0, 0x0, 0x0,          /* mov    edx,0x31 */
+    0xba, 0x28, 0x0, 0x0, 0x0,          /* mov    edx,0x28 */
     0xcd, 0x80,                         /* int    0x80 */
-    0xe9, 0x6d, 0xff, 0xff, 0xff,       /* jmp    15000060 <readunsigned> */
-                                        /* readunsigned.done: */
+    0xe9, 0x67, 0xff, 0xff, 0xff,       /* jmp    1500005e <readint32> */
+                                        /* readint32.done: */
+    0x21, 0xff,                         /* and    edi,edi */
+    0x74, 0x2,                          /* je     150000fd <readint32.notnegative> */
+    0xf7, 0xd8,                         /* neg    eax */
+                                        /* readint32.notnegative: */
     0xc3,                               /* ret     */
 };
 
-const unsigned char spasm_writeunsigned[52] = {
+const unsigned char spasm_writeint32[71] = {
                                         /* writeunsigned: */
     0xbe, 0xfe, 0x0, 0x0, 0x25,         /* mov    esi,0x250000fe */
     0xbb, 0xa, 0x0, 0x0, 0x0,           /* mov    ebx,0xa */
     0xc6, 0x6, 0xa,                     /* mov    BYTE PTR [esi],0xa */
     0x4e,                               /* dec    esi */
+    0x31, 0xff,                         /* xor    edi,edi */
+    0x83, 0xf8, 0x0,                    /* cmp    eax,0x0 */
+    0x7d, 0x4,                          /* jge    1500011c <writeunsigned.generate> */
+    0xf7, 0xd7,                         /* not    edi */
+    0xf7, 0xd8,                         /* neg    eax */
                                         /* writeunsigned.generate: */
     0x31, 0xd2,                         /* xor    edx,edx */
     0xf7, 0xf3,                         /* div    ebx */
@@ -221,7 +232,12 @@ const unsigned char spasm_writeunsigned[52] = {
     0x88, 0x16,                         /* mov    BYTE PTR [esi],dl */
     0x4e,                               /* dec    esi */
     0x83, 0xf8, 0x0,                    /* cmp    eax,0x0 */
-    0x75, 0xf1,                         /* jne    15000102 <writeunsigned.generate> */
+    0x75, 0xf1,                         /* jne    1500011c <writeunsigned.generate> */
+    0x21, 0xff,                         /* and    edi,edi */
+    0x74, 0x4,                          /* je     15000133 <writeunsigned.nominusadd> */
+    0xc6, 0x6, 0x2d,                    /* mov    BYTE PTR [esi],0x2d */
+    0x4e,                               /* dec    esi */
+                                        /* writeunsigned.nominusadd: */
     0x46,                               /* inc    esi */
     0xb8, 0x4, 0x0, 0x0, 0x0,           /* mov    eax,0x4 */
     0xbb, 0x1, 0x0, 0x0, 0x0,           /* mov    ebx,0x1 */
@@ -232,10 +248,10 @@ const unsigned char spasm_writeunsigned[52] = {
     0xc3,                               /* ret     */
 };
 
-const unsigned char spasm_rodata[96] =
+const unsigned char spasm_rodata[94] =
         "> "
-        "Invalid input. Please enter an unsigned integer.\n"
-        "Number too large. Must be smaller than 2^32.\n";
+        "Invalid input. Please enter an integer.\n"
+        "Number too large. Must be between -/+ (2 ^ 31 - 1).\n";
 
 const uint32_t spasm_bss_usage = 255;
 
