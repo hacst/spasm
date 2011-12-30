@@ -31,7 +31,7 @@ const unsigned char spasm_jin[9] = {
                                         /* spasm_jin: */
     0x58,                               /* pop    eax */
     0x21, 0xc0,                         /* and    eax,eax */
-    0xf, 0x84, 0xcb, 0x3d, 0xa9, 0xd6,  /* je     deadbeaf <_end+0xd6a92dbf> */
+    0xf, 0x84, 0xc2, 0x3d, 0xa9, 0xd6,  /* je     deadbeaf <_end+0xd6a92db7> */
 };
 
 const unsigned char spasm_add[5] = {
@@ -50,9 +50,12 @@ const unsigned char spasm_and[5] = {
     0x50,                               /* push   eax */
 };
 
-const unsigned char spasm_str[4] = {
+const unsigned char spasm_str[13] = {
                                         /* spasm_str: */
     0x58,                               /* pop    eax */
+    0xbb, 0x4, 0x0, 0x0, 0x0,           /* mov    ebx,0x4 */
+    0x31, 0xd2,                         /* xor    edx,edx */
+    0xf7, 0xe3,                         /* mul    ebx */
     0x5b,                               /* pop    ebx */
     0x89, 0x18,                         /* mov    DWORD PTR [eax],ebx */
 };
@@ -67,7 +70,7 @@ const unsigned char spasm_mul[6] = {
 
 const unsigned char spasm_jmp[5] = {
                                         /* spasm_jmp: */
-    0xe9, 0xd4, 0x3d, 0xa9, 0xd6,       /* jmp    deadbeaf <_end+0xd6a92dbf> */
+    0xe9, 0xcb, 0x3d, 0xa9, 0xd6,       /* jmp    deadbeaf <_end+0xd6a92db7> */
 };
 
 const unsigned char spasm_stp[9] = {
@@ -80,7 +83,7 @@ const unsigned char spasm_stp[9] = {
 const unsigned char spasm_pri[6] = {
                                         /* spasm_pri: */
     0x58,                               /* pop    eax */
-    0xe8, 0xdf, 0x3d, 0xa9, 0xd6,       /* call   deadbeaf <_end+0xd6a92dbf> */
+    0xe8, 0xd6, 0x3d, 0xa9, 0xd6,       /* call   deadbeaf <_end+0xd6a92db7> */
 };
 
 const unsigned char spasm_les[12] = {
@@ -95,9 +98,12 @@ const unsigned char spasm_les[12] = {
     0x6a, 0x1,                          /* push   0x1 */
 };
 
-const unsigned char spasm_lv[3] = {
+const unsigned char spasm_lv[12] = {
                                         /* spasm_lv: */
     0x58,                               /* pop    eax */
+    0xbb, 0x4, 0x0, 0x0, 0x0,           /* mov    ebx,0x4 */
+    0x31, 0xd2,                         /* xor    edx,edx */
+    0xf7, 0xe3,                         /* mul    ebx */
     0xff, 0x30,                         /* push   DWORD PTR [eax] */
 };
 
@@ -128,7 +134,7 @@ const unsigned char spasm_la[5] = {
 
 const unsigned char spasm_rea[6] = {
                                         /* spasm_rea: */
-    0xe8, 0xda, 0x3d, 0xa9, 0xd6,       /* call   deadbeaf <_end+0xd6a92dbf> */
+    0xe8, 0xd1, 0x3d, 0xa9, 0xd6,       /* call   deadbeaf <_end+0xd6a92db7> */
     0x50,                               /* push   eax */
 };
 
@@ -253,5 +259,5 @@ const unsigned char spasm_rodata[94] =
         "Invalid input. Please enter an integer.\n"
         "Number too large. Must be between -/+ (2 ^ 31 - 1).\n";
 
-const uint32_t spasm_bss_usage = 255;
+const uint32_t spasm_bss_usage = 256;
 

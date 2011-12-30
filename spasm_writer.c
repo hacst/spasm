@@ -135,7 +135,8 @@ Errc write_command(const Command *command, unsigned char **buffer)
     case SPASM_LC:
         return write_raw_command_with_uint32_data(spasm_lc, sizeof(spasm_lc), 1, command->argument.constant_arg, buffer);
     case SPASM_LA:
-        return write_raw_command_with_uint32_data(spasm_la, sizeof(spasm_la), 1, command->argument.memory_arg->vaddr, buffer);
+        assert(command->argument.memory_arg->vaddr % 4 == 0);
+        return write_raw_command_with_uint32_data(spasm_la, sizeof(spasm_la), 1, command->argument.memory_arg->vaddr / 4, buffer);
     default:
         memcpy(*buffer,
                 SPASM_COMMANDTYPE_TO_COMMAND[command->type],

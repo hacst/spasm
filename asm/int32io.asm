@@ -122,7 +122,7 @@ neg eax
 
 .generate:
 xor edx, edx
-div ebx ; div 10
+div ebx ; div edx:eax, 10
 
 ; Store remainder in string
 add edx, '0'

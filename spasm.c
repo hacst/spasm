@@ -85,7 +85,7 @@ int main(int argn, char **argv) {
     mem = parser.memory_location_first;
     while (mem)
     {
-        printf("0x%x l.%u $%s [%i] \n", mem->vaddr, mem->source_line, mem->name, mem->size);
+        printf("0x%x - 0x%x l.%u $%s (%i bytes)\n", mem->vaddr, mem->vaddr + mem->size - 1, mem->source_line, mem->name, mem->size);
         mem = mem->next;
     }
     printf("Commands:\n");

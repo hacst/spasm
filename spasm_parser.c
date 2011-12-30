@@ -363,7 +363,7 @@ Errc parse_line(ParserState *parser, const uint32_t line_num, const char *line)
         if (read_to_end_of_line(cur) != ERR_SUCCESS)
             return ERR_SYNTAX;
 
-        if (insert_bss_variable(parser, tmp, tmp_end - tmp, (uint32_t) size, line_num) == 0)
+        if (insert_bss_variable(parser, tmp, tmp_end - tmp, (uint32_t) size * sizeof(int32_t), line_num) == 0)
             return ERR_ALLOC;
 
         return ERR_SUCCESS;
