@@ -52,4 +52,27 @@ void elf_write(FILE *file,
         unsigned int bss_vaddr,
         size_t bss_size);
 
+/**
+ *  @brief Return a set of addresses for the required sizes that prevent
+ *         padding from being required in files written with elf_write.
+ *
+ *  @param base_vaddr Lowest vaddr to consider.
+ *  @param text_size Size of text segment
+ *  @param rodata_size Size of rodata segment
+ *  @param data_size Size of data segment
+ *  @param text_vaddr Target variable for optimal text vaddr.
+ *  @param rodata_vaddr Target variable for optimal rodata vaddr.
+ *  @param data_vaddr Target variable for optimal data vaddr.
+ *  @param bss_vaddr Target variable for optimal bss vaddr.
+ */
+void elf_optimize_alignment(
+        unsigned int base_vaddr,
+        unsigned int text_size,
+        unsigned int rodata_size,
+        unsigned int data_size,
+        unsigned int *text_vaddr,
+        unsigned int *rodata_vaddr,
+        unsigned int *data_vaddr,
+        unsigned int *bss_vaddr);
+
 #endif /* ELFWRITE_H_ */

@@ -347,3 +347,23 @@ void elf_write(FILE *file,
     fwrite(&shdr_bss, sizeof(shdr_bss), 1, file);
 }
 
+void elf_optimize_alignment(
+        unsigned int base_vaddr,
+        unsigned int text_size,
+        unsigned int rodata_size,
+        unsigned int data_size,
+        unsigned int *text_vaddr,
+        unsigned int *rodata_vaddr,
+        unsigned int *data_vaddr,
+        unsigned int *bss_vaddr)
+{
+    const unsigned int text_file_offset = sizeof(Elf32_Ehdr) + 4 * sizeof(Elf32_Phdr);
+    const unsigned int rodata_file_offset = text_file_offset + text_size;
+    const unsigned int data_file_offset = rodata_file_offset + rodata_size;
+
+    *text_vaddr = base_vaddr + padding_for(base_vaddr, text_file_offset, 0x1000);
+    *rodata_vaddr = *text_vaddr + text_size + padding_for(*text_vaddr + text_size, rodata_file_offset, 0x1000);
+    *data_vaddr = *rodata_vaddr + rodata_size + padding_for(*rodata_vaddr + rodata_size, data_file_offset, 0x1000);
+    *bss_vaddr = *data_vaddr + data_size + padding_for(*data_vaddr + data_size, 0, 0x1000);
+}
+

@@ -28,70 +28,47 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+typedef struct SpasmBuiltins SpasmBuiltins;
 
-const unsigned char *SPASM_COMMANDTYPE_TO_COMMAND[] = {
-        spasm_add,
-        spasm_mul,
-        spasm_sub,
-        spasm_div,
-
-        spasm_les,
-        spasm_and,
-        spasm_equ,
-        spasm_not,
-
-        spasm_la,
-        spasm_lc,
-        spasm_lv,
-        spasm_str,
-
-        spasm_pri,
-        spasm_rea,
-
-        spasm_jmp,
-        spasm_jin,
-        spasm_nop,
-        spasm_stp,
-
-        0,
-        0
+struct SpasmBuiltins
+{
+    uint32_t rea_vaddr;
+    uint32_t pri_vaddr;
 };
 
-const size_t SPASM_COMMANDTYPE_TO_COMMAND_SIZE[] = {
-        sizeof(spasm_add),
-        sizeof(spasm_mul),
-        sizeof(spasm_sub),
-        sizeof(spasm_div),
+const unsigned char *SPASM_COMMANDTYPE_TO_COMMAND[] = { spasm_add, spasm_mul,
+        spasm_sub, spasm_div,
 
-        sizeof(spasm_les),
-        sizeof(spasm_and),
-        sizeof(spasm_equ),
+        spasm_les, spasm_and, spasm_equ, spasm_not,
+
+        spasm_la, spasm_lc, spasm_lv, spasm_str,
+
+        spasm_pri, spasm_rea,
+
+        spasm_jmp, spasm_jin, spasm_nop, spasm_stp,
+
+        0, 0 };
+
+const size_t SPASM_COMMANDTYPE_TO_COMMAND_SIZE[] = { sizeof(spasm_add),
+        sizeof(spasm_mul), sizeof(spasm_sub), sizeof(spasm_div),
+
+        sizeof(spasm_les), sizeof(spasm_and), sizeof(spasm_equ),
         sizeof(spasm_not),
 
-        sizeof(spasm_la),
-        sizeof(spasm_lc),
-        sizeof(spasm_lv),
+        sizeof(spasm_la), sizeof(spasm_lc), sizeof(spasm_lv),
         sizeof(spasm_str),
 
-        sizeof(spasm_pri),
-        sizeof(spasm_rea),
+        sizeof(spasm_pri), sizeof(spasm_rea),
 
-        sizeof(spasm_jmp),
-        sizeof(spasm_jin),
-        sizeof(spasm_nop),
+        sizeof(spasm_jmp), sizeof(spasm_jin), sizeof(spasm_nop),
         sizeof(spasm_stp),
 
-        0,
-        0
-};
+        0, 0 };
 
-Errc write_raw_command_with_uint32_data(
-        const unsigned char command[],
-        const size_t command_size,
-        const size_t command_data_offset,
-        const uint32_t data,
-        unsigned char **buffer)
-{
+
+Errc write_raw_command_with_uint32_data(const unsigned char command[],
+        const size_t command_size, const size_t command_data_offset,
+        const uint32_t data, unsigned char **buffer) {
     const size_t behind_data_offset = command_data_offset + sizeof(data);
 
     assert(command_size >= command_data_offset + sizeof(data));
@@ -102,44 +79,113 @@ Errc write_raw_command_with_uint32_data(
     memcpy(*buffer, &data, sizeof(data));
     *buffer += sizeof(data);
 
-    memcpy(*buffer, command + behind_data_offset, command_size - behind_data_offset);
+    memcpy(*buffer, command + behind_data_offset, command_size
+            - behind_data_offset);
     *buffer += command_size - behind_data_offset;
 
     return ERR_SUCCESS;
 }
 
-Errc write_command(const Command *command, unsigned char **buffer)
+Errc write_with_replacements(
+        const unsigned char command[], size_t command_size,
+        const uint32_t offsets[], const uint32_t replacements[], const size_t replacement_count,
+        unsigned char **buffer)
 {
-    switch (command->type)
+    size_t i;
+    uint32_t prevoff = 0;
+    uint32_t curoff = 0;
+
+    for (i = 0; i < replacement_count; ++i)
     {
+        curoff = offsets[i] - prevoff;
+
+        memcpy(*buffer, command, curoff);
+        *buffer += curoff;
+        command += curoff;
+
+        memcpy(*buffer, &(replacements[i]), sizeof(int32_t));
+        *buffer += sizeof(int32_t);
+        command += sizeof(int32_t);
+
+        command_size -= curoff + sizeof(int32_t);
+        prevoff = offsets[i] + sizeof(int32_t);
+    }
+
+    memcpy(*buffer, command, command_size);
+    *buffer += command_size;
+
+    return ERR_SUCCESS;
+}
+
+Errc write_spasm_readint32(const uint32_t rodata_vaddr_base, const uint32_t data_vaddr_base, unsigned char **buffer)
+{
+    const uint32_t prompt_rodata_vaddr = rodata_vaddr_base + 0;
+    const uint32_t ofm_rodata_vaddr = rodata_vaddr_base + 42;
+    const uint32_t nanm_rodata_vaddr = rodata_vaddr_base + 2;
+    const uint32_t strbuf_data_vaddr = data_vaddr_base + 0;
+
+    const uint32_t offsets[5] = {
+            11,
+            33,
+            50,
+            113,
+            137
+    };
+
+    uint32_t replacements[5];
+    replacements[0] = prompt_rodata_vaddr;
+    replacements[1] = strbuf_data_vaddr;
+    replacements[2] = strbuf_data_vaddr;
+    replacements[3] = ofm_rodata_vaddr;
+    replacements[4] = nanm_rodata_vaddr;
+
+    return write_with_replacements(spasm_readint32, sizeof(spasm_readint32), offsets, replacements, 5, buffer);
+}
+
+Errc write_spasm_writeint32(const uint32_t data_vaddr_base, unsigned char **buffer)
+{
+    const uint32_t strbuf_data_vaddr = data_vaddr_base + 0;
+
+    const uint32_t offsets[2] = {
+            1,
+            62
+    };
+
+    uint32_t replacements[2];
+    replacements[0] = strbuf_data_vaddr + 255 - 1;
+    replacements[1] = strbuf_data_vaddr + 255;
+
+    return write_with_replacements(spasm_writeint32, sizeof(spasm_writeint32), offsets, replacements, 2, buffer);
+}
+
+
+Errc write_command(const Command *command, unsigned char **buffer, const SpasmBuiltins *builtins) {
+    switch (command->type) {
     case SPASM_REA:
-        return write_raw_command_with_uint32_data(
-                spasm_rea, sizeof(spasm_rea), 1,
-                (uint32_t)((int32_t)0x08048080 - (int32_t)(command->vaddr + 1 + 4)),
-                buffer);
+        return write_raw_command_with_uint32_data(spasm_rea, sizeof(spasm_rea),
+                1, (uint32_t)((int64_t) builtins->rea_vaddr - (int64_t) (command->vaddr + 1 + 4)), buffer);
     case SPASM_PRI:
-        return write_raw_command_with_uint32_data(
-                spasm_pri, sizeof(spasm_pri), 2,
-                (uint32_t)((int32_t)(0x08048080 + sizeof(spasm_readint32)) - (int32_t)(command->vaddr + 2 + 4)),
-                buffer);
+        return write_raw_command_with_uint32_data(spasm_pri, sizeof(spasm_pri),
+                2, (uint32_t)((int64_t) builtins->pri_vaddr - (int64_t) (command->vaddr + 2 + 4)), buffer);
     case SPASM_JMP:
-        return write_raw_command_with_uint32_data(
-                spasm_jmp, sizeof(spasm_jmp), 1,
-                (uint32_t)((int32_t)command->argument.label_arg->command->vaddr - (int32_t)(command->vaddr + 1 + 4)),
-                buffer);
+        return write_raw_command_with_uint32_data(spasm_jmp, sizeof(spasm_jmp),
+                1, (uint32_t)(
+                        (int64_t) command->argument.label_arg->command->vaddr
+                                - (int64_t) (command->vaddr + 1 + 4)), buffer);
     case SPASM_JIN:
-        return write_raw_command_with_uint32_data(
-                spasm_jin, sizeof(spasm_jin), 5,
-                (uint32_t)((int32_t)command->argument.label_arg->command->vaddr - (int32_t)(command->vaddr + 5 + 4)),
-                buffer);
+        return write_raw_command_with_uint32_data(spasm_jin, sizeof(spasm_jin),
+                5, (uint32_t)(
+                        (int64_t) command->argument.label_arg->command->vaddr
+                                - (int64_t) (command->vaddr + 5 + 4)), buffer);
     case SPASM_LC:
-        return write_raw_command_with_uint32_data(spasm_lc, sizeof(spasm_lc), 1, command->argument.constant_arg, buffer);
+        return write_raw_command_with_uint32_data(spasm_lc, sizeof(spasm_lc),
+                1, command->argument.constant_arg, buffer);
     case SPASM_LA:
         assert(command->argument.memory_arg->vaddr % 4 == 0);
-        return write_raw_command_with_uint32_data(spasm_la, sizeof(spasm_la), 1, command->argument.memory_arg->vaddr / 4, buffer);
+        return write_raw_command_with_uint32_data(spasm_la, sizeof(spasm_la),
+                1, command->argument.memory_arg->vaddr / 4, buffer);
     default:
-        memcpy(*buffer,
-                SPASM_COMMANDTYPE_TO_COMMAND[command->type],
+        memcpy(*buffer, SPASM_COMMANDTYPE_TO_COMMAND[command->type],
                 SPASM_COMMANDTYPE_TO_COMMAND_SIZE[command->type]);
 
         *buffer += SPASM_COMMANDTYPE_TO_COMMAND_SIZE[command->type];
@@ -148,13 +194,11 @@ Errc write_command(const Command *command, unsigned char **buffer)
     }
 }
 
-Errc write_text(const ParserState *parser, unsigned char *buffer)
-{
+Errc write_text(const ParserState *parser, unsigned char *buffer, const SpasmBuiltins *builtins) {
     unsigned char *current = buffer;
     const Command *command = parser->command_first;
-    while (command != 0)
-    {
-        Errc error = write_command(command, &current);
+    while (command != 0) {
+        Errc error = write_command(command, &current, builtins);
         if (error != ERR_SUCCESS)
             return error;
 
@@ -164,14 +208,12 @@ Errc write_text(const ParserState *parser, unsigned char *buffer)
     return ERR_SUCCESS;
 }
 
-Errc write_xdata(const ParserState *parser, unsigned char *data_buffer, unsigned char *rodata_buffer)
-{
+Errc write_xdata(const ParserState *parser, unsigned char *data_buffer,
+        unsigned char *rodata_buffer) {
     MemoryLocation *location = parser->memory_location_first;
 
-    while (location)
-    {
-        switch (location->type)
-        {
+    while (location) {
+        switch (location->type) {
         case SPASM_RODATA:
             memcpy(rodata_buffer, location->content, location->size);
             rodata_buffer += location->size;
@@ -189,21 +231,14 @@ Errc write_xdata(const ParserState *parser, unsigned char *data_buffer, unsigned
     return ERR_SUCCESS;
 }
 
-size_t update_parser_state_vaddr_info(
-        ParserState *parser,
-        uint32_t text_vaddr,
-        uint32_t bss_vaddr,
-        uint32_t rodata_vaddr,
-        uint32_t data_vaddr)
-{
+size_t update_parser_state_vaddr_info(ParserState *parser, uint32_t text_vaddr,
+        uint32_t bss_vaddr, uint32_t rodata_vaddr, uint32_t data_vaddr) {
     MemoryLocation *location = parser->memory_location_first;
     Command *command = parser->command_first;
     const uint32_t text_vaddr_first = text_vaddr;
 
-    while (location)
-    {
-        switch(location->type)
-        {
+    while (location) {
+        switch (location->type) {
         case SPASM_BSS:
             location->vaddr = bss_vaddr;
             bss_vaddr += location->size;
@@ -223,8 +258,7 @@ size_t update_parser_state_vaddr_info(
         location = location->next;
     }
 
-    while (command)
-    {
+    while (command) {
         command->vaddr = text_vaddr;
         text_vaddr += SPASM_COMMANDTYPE_TO_COMMAND_SIZE[command->type];
 
@@ -234,37 +268,55 @@ size_t update_parser_state_vaddr_info(
     return text_vaddr - text_vaddr_first;
 }
 
-Errc write_program(ParserState *parser, FILE *file)
-{
-    const uint32_t text_vaddr_base = 0x08048080;
-    const uint32_t rodata_vaddr_base = 0x15000000;
-    const uint32_t data_vaddr_base = 0x20000000;
-    const uint32_t bss_vaddr_base = 0x25000000;
+Errc write_program(ParserState *parser, FILE *file) {
+    uint32_t text_vaddr_base;
+    uint32_t rodata_vaddr_base;
+    uint32_t data_vaddr_base;
+    uint32_t bss_vaddr_base;
 
-    const size_t text_size = update_parser_state_vaddr_info(parser,
-            text_vaddr_base +  sizeof(spasm_readint32) + sizeof(spasm_writeint32),
-            bss_vaddr_base + spasm_bss_usage,
-            rodata_vaddr_base + sizeof(spasm_rodata),
-            data_vaddr_base)
-            + sizeof(spasm_readint32)
-            + sizeof(spasm_writeint32);
+    uint32_t entry_vaddr;
+
+    SpasmBuiltins builtins;
+
+    /* Do a dry run to get text_size */
+    const size_t text_size = update_parser_state_vaddr_info(parser, 0, 0, 0, 0)
+            + sizeof(spasm_readint32) + sizeof(spasm_writeint32);
+
+    const size_t rodata_size = parser->rodata_used + sizeof(spasm_rodata);
+    const size_t data_size = parser->data_used;
+    const size_t bss_size = parser->bss_used + spasm_bss_usage;
 
     unsigned char *text_buffer = malloc(text_size);
-    unsigned char *rodata_buffer = malloc(parser->rodata_used + sizeof(spasm_rodata));
-    unsigned char *data_buffer = malloc(parser->data_used);
+    unsigned char *text_buffer_tmp = text_buffer;
+    unsigned char *rodata_buffer = malloc(rodata_size);
+    unsigned char *data_buffer = malloc(bss_size);
 
     Errc result = ERR_SUCCESS;
 
-    if (   !text_buffer
-        || !rodata_buffer
-        || (!data_buffer && !parser->data_used))
+    if (!text_buffer || !rodata_buffer || (!data_buffer && !parser->data_used))
         return ERR_ALLOC;
 
+    elf_optimize_alignment(0x08048000, text_size, rodata_size, data_size,
+            &text_vaddr_base, &rodata_vaddr_base, &data_vaddr_base,
+            &bss_vaddr_base);
 
-    memcpy(text_buffer, spasm_readint32, sizeof(spasm_readint32));
-    memcpy(text_buffer + sizeof(spasm_readint32), spasm_writeint32, sizeof(spasm_writeint32));
+    builtins.rea_vaddr = text_vaddr_base;
+    builtins.pri_vaddr = text_vaddr_base + sizeof(spasm_readint32);
 
-    result = write_text(parser, text_buffer + sizeof(spasm_readint32) + sizeof(spasm_writeint32));
+    entry_vaddr = text_vaddr_base + sizeof(spasm_readint32)
+            + sizeof(spasm_writeint32);
+    /* Do actual update run with optimized address values */
+    update_parser_state_vaddr_info(parser, entry_vaddr, bss_vaddr_base
+            + spasm_bss_usage, rodata_vaddr_base + sizeof(spasm_rodata),
+            data_vaddr_base);
+
+
+    write_spasm_readint32(rodata_vaddr_base, data_vaddr_base, &text_buffer_tmp);
+    assert(text_buffer_tmp == text_buffer + sizeof(spasm_readint32));
+    write_spasm_writeint32(data_vaddr_base, &text_buffer_tmp);
+    assert(text_buffer_tmp == text_buffer + sizeof(spasm_readint32) + sizeof(spasm_writeint32));
+
+    result = write_text(parser, text_buffer_tmp, &builtins);
     if (result != ERR_SUCCESS)
         goto cleanup;
 
@@ -274,15 +326,11 @@ Errc write_program(ParserState *parser, FILE *file)
     if (result != ERR_SUCCESS)
         goto cleanup;
 
-    elf_write(file,
-            text_vaddr_base  +  sizeof(spasm_readint32) + sizeof(spasm_writeint32),
-            text_vaddr_base, text_buffer, text_size,
-            rodata_vaddr_base, rodata_buffer, parser->rodata_used + sizeof(spasm_rodata),
-            data_vaddr_base, data_buffer, parser->data_used,
-            bss_vaddr_base, parser->bss_used + spasm_bss_usage);
+    elf_write(file, entry_vaddr, text_vaddr_base, text_buffer, text_size,
+            rodata_vaddr_base, rodata_buffer, rodata_size, data_vaddr_base,
+            data_buffer, data_size, bss_vaddr_base, bss_size);
 
-cleanup:
-    free(data_buffer);
+    cleanup: free(data_buffer);
     free(rodata_buffer);
     free(text_buffer);
 
