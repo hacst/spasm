@@ -24,6 +24,7 @@
 #define ELFWRITE_H_
 
 #include <stdio.h>
+#include <stdint.h>
 
 /**
  *  @brief Writes an ELF executable with the given parameters to the given file.
@@ -42,14 +43,14 @@
  *  @param bss_size Size to reserve for the zero initialized data
  */
 void elf_write(FILE *file,
-        unsigned int entry_point,
-        unsigned int text_vaddr,
+        uint32_t entry_point,
+        uint32_t text_vaddr,
         const unsigned char *text, size_t text_size,
-        unsigned int rodata_vaddr,
+        uint32_t rodata_vaddr,
         const unsigned char *rodata, size_t rodata_size,
-        unsigned int data_vaddr,
+        uint32_t data_vaddr,
         const unsigned char *data, size_t data_size,
-        unsigned int bss_vaddr,
+        uint32_t bss_vaddr,
         size_t bss_size);
 
 /**
@@ -66,13 +67,13 @@ void elf_write(FILE *file,
  *  @param bss_vaddr Target variable for optimal bss vaddr.
  */
 void elf_optimize_alignment(
-        unsigned int base_vaddr,
-        unsigned int text_size,
-        unsigned int rodata_size,
-        unsigned int data_size,
-        unsigned int *text_vaddr,
-        unsigned int *rodata_vaddr,
-        unsigned int *data_vaddr,
-        unsigned int *bss_vaddr);
+        uint32_t base_vaddr,
+        uint32_t text_size,
+        uint32_t rodata_size,
+        uint32_t data_size,
+        uint32_t *text_vaddr,
+        uint32_t *rodata_vaddr,
+        uint32_t *data_vaddr,
+        uint32_t *bss_vaddr);
 
 #endif /* ELFWRITE_H_ */

@@ -76,14 +76,14 @@ size_t write_padding(const size_t size, FILE *file)
 
 
 void elf_write(FILE *file,
-        unsigned int entry_point,
-        unsigned int text_vaddr,
+        uint32_t entry_point,
+        uint32_t text_vaddr,
         const unsigned char *text, size_t text_size,
-        unsigned int rodata_vaddr,
+        uint32_t rodata_vaddr,
         const unsigned char *rodata, size_t rodata_size,
-        unsigned int data_vaddr,
+        uint32_t data_vaddr,
         const unsigned char *data, size_t data_size,
-        unsigned int bss_vaddr,
+        uint32_t bss_vaddr,
         size_t bss_size)
 {
     /*
@@ -100,13 +100,13 @@ void elf_write(FILE *file,
                           ".data\0"
                           ".bss";
 
-    const unsigned int strtab_shstrtab_index = 1;
-    const unsigned int strtab_text_index = 11;
-    const unsigned int strtab_rodata_index = 17;
-    const unsigned int strtab_data_index = 25;
-    const unsigned int strtab_bss_index = 31;
+    const uint32_t strtab_shstrtab_index = 1;
+    const uint32_t strtab_text_index = 11;
+    const uint32_t strtab_rodata_index = 17;
+    const uint32_t strtab_data_index = 25;
+    const uint32_t strtab_bss_index = 31;
 
-    const unsigned int strtab_size = sizeof(strtab);
+    const uint32_t strtab_size = sizeof(strtab);
 
     /*
      * Layout in file
@@ -348,18 +348,18 @@ void elf_write(FILE *file,
 }
 
 void elf_optimize_alignment(
-        unsigned int base_vaddr,
-        unsigned int text_size,
-        unsigned int rodata_size,
-        unsigned int data_size,
-        unsigned int *text_vaddr,
-        unsigned int *rodata_vaddr,
-        unsigned int *data_vaddr,
-        unsigned int *bss_vaddr)
+        uint32_t base_vaddr,
+        uint32_t text_size,
+        uint32_t rodata_size,
+        uint32_t data_size,
+        uint32_t *text_vaddr,
+        uint32_t *rodata_vaddr,
+        uint32_t *data_vaddr,
+        uint32_t *bss_vaddr)
 {
-    const unsigned int text_file_offset = sizeof(Elf32_Ehdr) + 4 * sizeof(Elf32_Phdr);
-    const unsigned int rodata_file_offset = text_file_offset + text_size;
-    const unsigned int data_file_offset = rodata_file_offset + rodata_size;
+    const uint32_t text_file_offset = sizeof(Elf32_Ehdr) + 4 * sizeof(Elf32_Phdr);
+    const uint32_t rodata_file_offset = text_file_offset + text_size;
+    const uint32_t data_file_offset = rodata_file_offset + rodata_size;
 
     *text_vaddr = base_vaddr + padding_for(base_vaddr, text_file_offset, 0x1000);
     *rodata_vaddr = *text_vaddr + text_size + padding_for(*text_vaddr + text_size, rodata_file_offset, 0x1000);
