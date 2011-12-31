@@ -1,0 +1,200 @@
+DS $a 1
+DS $b 1
+DS $c 1
+DS $d 1
+DS $x 1
+DS $y 1
+DS $mod 1
+DS $div 1
+REA
+LA $a
+STR
+REA
+LA $b
+STR
+LA $a
+LV
+LC 0
+LES
+JIN #m1
+LC 0
+LA $a
+LV
+SUB
+LA $a
+STR
+LA $a
+LV
+PRI
+JMP #m2
+#m1 NOP
+#m2 NOP
+LA $b
+LV
+LC 0
+LES
+JIN #m3
+LC 0
+LA $b
+LV
+SUB
+LA $b
+STR
+LA $b
+LV
+PRI
+JMP #m4
+#m3 NOP
+#m4 NOP
+LA $a
+LV
+LA $b
+LV
+DIV
+LA $c
+STR
+LA $a
+LV
+LA $c
+LV
+LA $b
+LV
+MUL
+SUB
+LA $d
+STR
+LA $d
+LV
+PRI
+LC 1
+PRI
+REA
+LA $a
+STR
+REA
+LA $b
+STR
+REA
+LA $c
+STR
+LC 1
+LA $x
+STR
+LA $a
+LV
+LA $y
+STR
+#m5 NOP
+LC 0
+LA $b
+LV
+LES
+JIN #m6
+LA $b
+LV
+LC 2
+DIV
+LA $div
+STR
+LA $b
+LV
+LA $div
+LV
+LC 2
+MUL
+SUB
+LA $mod
+STR
+LA $mod
+LV
+LC 1
+EQU
+JIN #m7
+LA $x
+LV
+LA $y
+LV
+MUL
+LA $c
+LV
+DIV
+LA $div
+STR
+LA $x
+LV
+LA $y
+LV
+MUL
+LA $div
+LV
+LA $c
+LV
+MUL
+SUB
+LA $mod
+STR
+LA $mod
+LV
+LA $x
+STR
+JMP #m8
+#m7 NOP
+#m8 NOP
+LA $y
+LV
+LA $y
+LV
+MUL
+LA $c
+LV
+DIV
+LA $div
+STR
+LA $y
+LV
+LA $y
+LV
+MUL
+LA $div
+LV
+LA $c
+LV
+MUL
+SUB
+LA $mod
+STR
+LA $mod
+LV
+LA $y
+STR
+LA $b
+LV
+LC 2
+DIV
+LA $b
+STR
+JMP #m5
+#m6 NOP
+LA $x
+LV
+LA $c
+LV
+DIV
+LA $div
+STR
+LA $x
+LV
+LA $div
+LV
+LA $c
+LV
+MUL
+SUB
+LA $mod
+STR
+LA $mod
+LV
+PRI
+LC 89
+PRI
+STP

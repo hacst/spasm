@@ -1,0 +1,99 @@
+DS $number 1
+DS $n 1
+DS $i 1
+DS $div 1
+DS $mod 1
+REA
+LA $number
+STR
+LC 2
+LA $i
+STR
+LA $number
+LV
+LA $n
+STR
+#m1 NOP
+LA $i
+LV
+LA $n
+LV
+LA $i
+LV
+DIV
+LC 1
+ADD
+LES
+JIN #m2
+LA $n
+LV
+LA $i
+LV
+DIV
+LA $div
+STR
+LA $n
+LV
+LA $div
+LV
+LA $i
+LV
+MUL
+SUB
+LA $mod
+STR
+#m3 NOP
+LA $mod
+LV
+LC 0
+EQU
+JIN #m4
+LA $i
+LV
+PRI
+LA $n
+LV
+LA $i
+LV
+DIV
+LA $n
+STR
+LA $n
+LV
+LA $i
+LV
+DIV
+LA $div
+STR
+LA $n
+LV
+LA $div
+LV
+LA $i
+LV
+MUL
+SUB
+LA $mod
+STR
+JMP #m3
+#m4 NOP
+LA $i
+LV
+LC 1
+ADD
+LA $i
+STR
+JMP #m1
+#m2 NOP
+LC 1
+LA $n
+LV
+LES
+JIN #m5
+LA $n
+LV
+PRI
+JMP #m6
+#m5 NOP
+#m6 NOP
+STP

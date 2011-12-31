@@ -1,0 +1,294 @@
+DS $x 1
+DS $i 1
+DS $i1 1
+DS $f 1
+LC 3
+LC 5
+ADD
+LC 3
+LC 4
+ADD
+SUB
+LC 4
+LC 2
+LC 3
+MUL
+LC 0
+LC 5
+SUB
+ADD
+DIV
+MUL
+LA $x
+STR
+LC 1
+LC 1
+ADD
+LA $x
+LV
+LC 2
+LC 1
+LC 1
+LC 1
+ADD
+MUL
+SUB
+ADD
+MUL
+LA $x
+STR
+LA $x
+LV
+PRI
+LC 8
+PRI
+LC 1
+LA $x
+STR
+LA $x
+LV
+LC 1
+ADD
+LA $x
+STR
+LA $x
+LV
+LA $x
+LV
+LC 1
+ADD
+ADD
+LA $x
+STR
+LA $x
+LV
+PRI
+LC 5
+PRI
+LC 3
+LA $i
+STR
+LA $i
+LV
+PRI
+LC 3
+PRI
+LC 1111
+PRI
+REA
+LA $i
+STR
+LA $i
+LV
+PRI
+LC 0
+JIN #m1
+LC 5
+LA $i
+STR
+LA $i
+LV
+PRI
+JMP #m2
+#m1 NOP
+LC 6
+LA $f
+STR
+LA $f
+LV
+PRI
+#m2 NOP
+LC 6
+PRI
+LC 1
+JIN #m3
+LC 5
+LA $i
+STR
+LA $i
+LV
+PRI
+JMP #m4
+#m3 NOP
+LC 7
+LA $f
+STR
+LA $f
+LV
+PRI
+#m4 NOP
+LC 5
+PRI
+LC 6
+LA $i
+STR
+LA $i
+LV
+LC 1
+SUB
+LA $i
+STR
+LA $i
+LV
+PRI
+LC 5
+PRI
+#m5 NOP
+LA $i
+LV
+JIN #m6
+LA $i
+LV
+PRI
+LA $i
+LV
+LC 1
+SUB
+LA $i
+STR
+JMP #m5
+#m6 NOP
+LC 5
+PRI
+LC 4
+PRI
+LC 3
+PRI
+LC 2
+PRI
+LC 1
+PRI
+LC 3333
+LA $i
+STR
+LA $i
+LV
+PRI
+LC 3333
+PRI
+LC 4444
+LA $i1
+STR
+LA $i1
+LV
+LA $i
+STR
+LA $i
+LV
+PRI
+LC 4444
+PRI
+LC 0
+LA $i1
+LV
+SUB
+LA $i
+STR
+LA $i
+LV
+PRI
+LC 0
+LC 4444
+SUB
+PRI
+LA $i1
+LV
+NOT
+LA $i
+STR
+LA $i
+LV
+PRI
+LC 0
+PRI
+LC 3
+LC 4
+ADD
+PRI
+LC 7
+PRI
+LC 3
+LC 4
+SUB
+PRI
+LC 0
+LC 1
+SUB
+PRI
+LC 3
+LC 4
+MUL
+PRI
+LC 12
+PRI
+LC 44
+LC 4
+DIV
+PRI
+LC 11
+PRI
+LC 4
+LC 3
+LES
+PRI
+LC 0
+PRI
+LC 3
+LC 4
+LES
+PRI
+LC 1
+PRI
+LC 3
+LC 4
+LES
+PRI
+LC 1
+PRI
+LC 4
+LC 3
+LES
+PRI
+LC 0
+PRI
+LC 3
+LC 4
+EQU
+PRI
+LC 0
+PRI
+LC 3
+LC 3
+EQU
+PRI
+LC 1
+PRI
+LC 3
+LC 4
+EQU
+NOT
+PRI
+LC 1
+PRI
+LC 3
+LC 3
+EQU
+NOT
+PRI
+LC 0
+PRI
+LC 0
+LC 4
+AND
+PRI
+LC 0
+PRI
+LC 3
+LC 4
+AND
+PRI
+LC 1
+PRI
+LC 1234567890
+PRI
+STP
