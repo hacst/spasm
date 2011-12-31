@@ -503,7 +503,7 @@ Errc parse_file(ParserState *parser, FILE *file)
 
     if (cur != buffer)
     {
-        *(cur + 1) = '\0';
+        *cur = '\0';
         result = parse_line(parser, line, buffer);
 
         if (result != ERR_SUCCESS)
