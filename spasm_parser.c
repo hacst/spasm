@@ -45,7 +45,7 @@ Label *get_label(ParserState *parser, const char *name, const size_t len)
 
     while (cur)
     {
-        if (strncmp(cur->name, name, len) == 0)
+        if (strlen(cur->name) == len && strncmp(cur->name, name, len) == 0)
             return cur;
 
         cur = cur->next;
@@ -101,7 +101,7 @@ MemoryLocation *get_bss_variable(ParserState *parser, const char *name, const si
 
     while (cur)
     {
-        if (cur->type == SPASM_BSS && strncmp(cur->name, name, len) == 0)
+        if (cur->type == SPASM_BSS && strlen(cur->name) == len && strncmp(cur->name, name, len) == 0)
             return cur;
 
         cur = cur->next;
