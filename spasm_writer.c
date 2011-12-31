@@ -30,14 +30,22 @@
 
 typedef struct SpasmBuiltins SpasmBuiltins;
 
+/**
+ * @brief Structure for passing builtin function virtual addresses
+ *        around.
+ */
 struct SpasmBuiltins
 {
-    uint32_t rea_vaddr;
-    uint32_t pri_vaddr;
+    uint32_t readint32_vaddr; /* readint32 function vaddr */
+    uint32_t printint32_vaddr; /* printint32 function vaddr */
 };
 
-const unsigned char *SPASM_COMMANDTYPE_TO_COMMAND[] = { spasm_add, spasm_mul,
-        spasm_sub, spasm_div,
+
+/**
+ * @brief CommandType to Command implementation mapper
+ */
+const unsigned char *SPASM_COMMANDTYPE_TO_COMMAND[] = {
+        spasm_add, spasm_mul, spasm_sub, spasm_div,
 
         spasm_les, spasm_and, spasm_equ, spasm_not,
 
@@ -49,8 +57,13 @@ const unsigned char *SPASM_COMMANDTYPE_TO_COMMAND[] = { spasm_add, spasm_mul,
 
         0, 0 };
 
-const size_t SPASM_COMMANDTYPE_TO_COMMAND_SIZE[] = { sizeof(spasm_add),
-        sizeof(spasm_mul), sizeof(spasm_sub), sizeof(spasm_div),
+
+/**
+ * @brief CommandType to implementation size mapper
+ */
+const size_t SPASM_COMMANDTYPE_TO_COMMAND_SIZE[] = {
+        sizeof(spasm_add), sizeof(spasm_mul), sizeof(spasm_sub),
+        sizeof(spasm_div),
 
         sizeof(spasm_les), sizeof(spasm_and), sizeof(spasm_equ),
         sizeof(spasm_not),
@@ -66,9 +79,20 @@ const size_t SPASM_COMMANDTYPE_TO_COMMAND_SIZE[] = { sizeof(spasm_add),
         0, 0 };
 
 
-Errc write_raw_command_with_uint32_data(const unsigned char command[],
+/**
+ * @brief Write a command with a single uint32_t replacement.
+ * @param command Command implementation to write.
+ * @param command_size command size
+ * @param command_data_offset Offset in command at which to perform replacement.
+ * @param data Data to replace with.
+ * @param buffer Buffer to write to. Will be advanced by size of command.
+ * @return ERR_SUCCESS on success.
+ */
+Errc write_with_single_replacement(
+        const unsigned char command[],
         const size_t command_size, const size_t command_data_offset,
         const uint32_t data, unsigned char **buffer) {
+
     const size_t behind_data_offset = command_data_offset + sizeof(data);
 
     assert(command_size >= command_data_offset + sizeof(data));
@@ -86,6 +110,17 @@ Errc write_raw_command_with_uint32_data(const unsigned char command[],
     return ERR_SUCCESS;
 }
 
+
+/**
+ * @brief Write a command wit multiple uint32_t replacements.
+ * @param command Command implementation to write.
+ * @param command_size command size
+ * @param offsets Array of offsets in command at which to perform replacements in ascending order.
+ * @param replacements Replacement values for offsets indexes.
+ * @param replacement_count Number of offsets/replacements.
+ * @param buffer Buffer to write to. Will be advanced by size of command.
+ * @return ERR_SUCCESS on success.
+ */
 Errc write_with_replacements(
         const unsigned char command[], size_t command_size,
         const uint32_t offsets[], const uint32_t replacements[], const size_t replacement_count,
@@ -117,6 +152,13 @@ Errc write_with_replacements(
     return ERR_SUCCESS;
 }
 
+
+/**
+ * @brief Write the builtin spasm_readint32 command to the given buffer.
+ * @param rodata_vaddr_base Base of rodata segment.
+ * @param data_vaddr_base Base of data segment.
+ * @param buffer Buffer to write to. Will be advanced by size of command.
+ */
 Errc write_spasm_readint32(const uint32_t rodata_vaddr_base, const uint32_t data_vaddr_base, unsigned char **buffer)
 {
     const uint32_t prompt_rodata_vaddr = rodata_vaddr_base + 0;
@@ -142,6 +184,12 @@ Errc write_spasm_readint32(const uint32_t rodata_vaddr_base, const uint32_t data
     return write_with_replacements(spasm_readint32, sizeof(spasm_readint32), offsets, replacements, 5, buffer);
 }
 
+
+/**
+ * @brief Write the builtin spasm_writeint32 command to the given buffer.
+ * @param data_vaddr_base Base of data segment.
+ * @param buffer Buffer to write to. Will be advanced by size of command.
+ */
 Errc write_spasm_writeint32(const uint32_t data_vaddr_base, unsigned char **buffer)
 {
     const uint32_t strbuf_data_vaddr = data_vaddr_base + 0;
@@ -159,30 +207,37 @@ Errc write_spasm_writeint32(const uint32_t data_vaddr_base, unsigned char **buff
 }
 
 
+/**
+ * @brief Writes the implementation of a given command to the given buffer.
+ * @param command Command to write
+ * @param buffer Buffer to write to. Will be advanced by command implementation size.
+ * @param builtins Builtin function addresses.
+ * @param return ERR_SUCCESS on success.
+ */
 Errc write_command(const Command *command, unsigned char **buffer, const SpasmBuiltins *builtins) {
     switch (command->type) {
     case SPASM_REA:
-        return write_raw_command_with_uint32_data(spasm_rea, sizeof(spasm_rea),
-                1, (uint32_t)((int64_t) builtins->rea_vaddr - (int64_t) (command->vaddr + 1 + 4)), buffer);
+        return write_with_single_replacement(spasm_rea, sizeof(spasm_rea),
+                1, (uint32_t)((int64_t) builtins->readint32_vaddr - (int64_t) (command->vaddr + 1 + 4)), buffer);
     case SPASM_PRI:
-        return write_raw_command_with_uint32_data(spasm_pri, sizeof(spasm_pri),
-                2, (uint32_t)((int64_t) builtins->pri_vaddr - (int64_t) (command->vaddr + 2 + 4)), buffer);
+        return write_with_single_replacement(spasm_pri, sizeof(spasm_pri),
+                2, (uint32_t)((int64_t) builtins->printint32_vaddr - (int64_t) (command->vaddr + 2 + 4)), buffer);
     case SPASM_JMP:
-        return write_raw_command_with_uint32_data(spasm_jmp, sizeof(spasm_jmp),
+        return write_with_single_replacement(spasm_jmp, sizeof(spasm_jmp),
                 1, (uint32_t)(
                         (int64_t) command->argument.label_arg->command->vaddr
                                 - (int64_t) (command->vaddr + 1 + 4)), buffer);
     case SPASM_JIN:
-        return write_raw_command_with_uint32_data(spasm_jin, sizeof(spasm_jin),
+        return write_with_single_replacement(spasm_jin, sizeof(spasm_jin),
                 5, (uint32_t)(
                         (int64_t) command->argument.label_arg->command->vaddr
                                 - (int64_t) (command->vaddr + 5 + 4)), buffer);
     case SPASM_LC:
-        return write_raw_command_with_uint32_data(spasm_lc, sizeof(spasm_lc),
+        return write_with_single_replacement(spasm_lc, sizeof(spasm_lc),
                 1, command->argument.constant_arg, buffer);
     case SPASM_LA:
         assert(command->argument.memory_arg->vaddr % 4 == 0);
-        return write_raw_command_with_uint32_data(spasm_la, sizeof(spasm_la),
+        return write_with_single_replacement(spasm_la, sizeof(spasm_la),
                 1, command->argument.memory_arg->vaddr / 4, buffer);
     default:
         memcpy(*buffer, SPASM_COMMANDTYPE_TO_COMMAND[command->type],
@@ -194,6 +249,14 @@ Errc write_command(const Command *command, unsigned char **buffer, const SpasmBu
     }
 }
 
+
+/**
+ * @brief Writes the text segment part of the ParserState into the given buffer.
+ * @param parser Parser to write data from.
+ * @param buffer Buffer to write implementation to.
+ * @param builtins Builtin function addresses.
+ * @return ERR_SUCCESS on success.
+ */
 Errc write_text(const ParserState *parser, unsigned char *buffer, const SpasmBuiltins *builtins) {
     unsigned char *current = buffer;
     const Command *command = parser->command_first;
@@ -208,8 +271,17 @@ Errc write_text(const ParserState *parser, unsigned char *buffer, const SpasmBui
     return ERR_SUCCESS;
 }
 
+
+/**
+ * @brief Write data/rodata part of ParserState into given buffers.
+ * @param parser Parser to write data from.
+ * @param data_buffer Buffer to write data memory location initial content to.
+ * @param rodata_buffer Buffer to write rodata memory location content to.
+ * @return ERR_SUCCESS on success.
+ */
 Errc write_xdata(const ParserState *parser, unsigned char *data_buffer,
         unsigned char *rodata_buffer) {
+
     MemoryLocation *location = parser->memory_location_first;
 
     while (location) {
@@ -231,8 +303,19 @@ Errc write_xdata(const ParserState *parser, unsigned char *data_buffer,
     return ERR_SUCCESS;
 }
 
+
+/**
+ * @brief Walk given ParserState and set actual virtual addresses of memory and commands.
+ * @param parser State
+ * @param text_vaddr Base virtual address for text segment.
+ * @param bss_vaddr Base virtual address for bss segment.
+ * @param rodata_vaddr Base virtual address for rodata segment.
+ * @param data_vaddr Base virtual address for data segment.
+ * @return Required text segment size.
+ */
 size_t update_parser_state_vaddr_info(ParserState *parser, uint32_t text_vaddr,
         uint32_t bss_vaddr, uint32_t rodata_vaddr, uint32_t data_vaddr) {
+
     MemoryLocation *location = parser->memory_location_first;
     Command *command = parser->command_first;
     const uint32_t text_vaddr_first = text_vaddr;
@@ -268,6 +351,9 @@ size_t update_parser_state_vaddr_info(ParserState *parser, uint32_t text_vaddr,
     return text_vaddr - text_vaddr_first;
 }
 
+
+
+
 Errc write_program(ParserState *parser, FILE *file) {
     uint32_t text_vaddr_base;
     uint32_t rodata_vaddr_base;
@@ -300,8 +386,8 @@ Errc write_program(ParserState *parser, FILE *file) {
             &text_vaddr_base, &rodata_vaddr_base, &data_vaddr_base,
             &bss_vaddr_base);
 
-    builtins.rea_vaddr = text_vaddr_base;
-    builtins.pri_vaddr = text_vaddr_base + sizeof(spasm_readint32);
+    builtins.readint32_vaddr = text_vaddr_base;
+    builtins.printint32_vaddr = text_vaddr_base + sizeof(spasm_readint32);
 
     entry_vaddr = text_vaddr_base + sizeof(spasm_readint32)
             + sizeof(spasm_writeint32);

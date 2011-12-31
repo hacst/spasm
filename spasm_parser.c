@@ -29,6 +29,14 @@
 #include <ctype.h>
 #include <errno.h>
 
+
+/**
+ * @brief Return a Label by name.
+ * @param parser State
+ * @param name Label name
+ * @param len Lenght of name
+ * @return *Label or 0 if it could not be found.
+ */
 Label *get_label(ParserState *parser, const char *name, const size_t len)
 {
     Label *cur = parser->label_first;
@@ -46,6 +54,14 @@ Label *get_label(ParserState *parser, const char *name, const size_t len)
     return 0;
 }
 
+
+/**
+ * @brief Return existing or, alternatively, newly created label by name.
+ * @param parser State
+ * @param name Label name
+ * @param len Length of name
+ * @return *Label
+ */
 Label *get_or_insert_label(ParserState *parser, const char *name, const size_t len)
 {
     Label *cur = get_label(parser, name, len);
@@ -69,6 +85,14 @@ Label *get_or_insert_label(ParserState *parser, const char *name, const size_t l
     return cur;
 }
 
+
+/**
+ * @brief Return bss memory location by name.
+ * @param parser State
+ * @param name Variable name
+ * @param len Length of name
+ * @return *MemoryLocation or 0 if it could not be found.
+ */
 MemoryLocation *get_bss_variable(ParserState *parser, const char *name, const size_t len)
 {
     MemoryLocation *cur = parser->memory_location_first;
@@ -85,6 +109,16 @@ MemoryLocation *get_bss_variable(ParserState *parser, const char *name, const si
     return 0;
 }
 
+
+/**
+ * @brief Create new bss memory location with given parameters.
+ * @param parser State
+ * @param name Name of variable/location to create.
+ * @param len Length of name
+ * @param size Size of variable/location in bytes.
+ * @param line_num Source code reference line for this variable/location.
+ * @return Newly created variable.
+ */
 MemoryLocation *insert_bss_variable(ParserState *parser, const char *name, const size_t len, const uint32_t size, const uint32_t line_num)
 {
     MemoryLocation *mem = (MemoryLocation*)calloc(1, sizeof(MemoryLocation));
@@ -111,6 +145,12 @@ MemoryLocation *insert_bss_variable(ParserState *parser, const char *name, const
     return mem;
 }
 
+
+/**
+ * @brief Checks the given state for errors.
+ * @param parser State
+ * @return ERR_SUCCESS if no error were found.
+ */
 Errc check_result(ParserState *parser)
 {
     Command *cmd = parser->command_first;
@@ -143,6 +183,11 @@ Errc check_result(ParserState *parser)
     return ERR_SUCCESS;
 }
 
+
+/**
+ * @brief Skip spaces and tabs in buffer
+ * @return buffer advanced by skipped characters.
+ */
 const char* skip_spaces(const char *buffer)
 {
     const char *ret = buffer;
@@ -152,6 +197,11 @@ const char* skip_spaces(const char *buffer)
     return ret;
 }
 
+
+/**
+ * @brief Skip alphanumeric characters in buffer.
+ * @return buffer advanced by skipped characters.
+ */
 const char* skip_alnums(const char *buffer)
 {
     const char *ret = buffer;
@@ -162,6 +212,10 @@ const char* skip_alnums(const char *buffer)
     return ret;
 }
 
+/**
+ * @brief Ensure content of buffer till newline is whitespace or comment.
+ * @return ERR_SUCCESS if EOL was reached. ERR_SYNTAX if unexpected characters were found.
+ */
 Errc read_to_end_of_line(const char *buffer)
 {
     buffer = skip_spaces(buffer);
@@ -174,6 +228,15 @@ Errc read_to_end_of_line(const char *buffer)
     return ERR_SUCCESS;
 }
 
+
+/**
+ * @brief Store a new command with the given parameters.
+ * @param parser State
+ * @param type Command type
+ * @param line_num Source code line number associated with this command
+ * @param label Label associated with this command (0 if none)
+ * @return *Created command
+ */
 Command* insert_command(ParserState *parser, CommandType type, uint32_t line_num, Label *label)
 {
     Command *cmd = (Command*)calloc(1, sizeof(Command));
@@ -197,6 +260,15 @@ Command* insert_command(ParserState *parser, CommandType type, uint32_t line_num
     return cmd;
 }
 
+
+/**
+ * @brief Parse a single command from given buffer.
+ * @param parser State
+ * @param line_num Current source code line number.
+ * @param buffer Buffer to parse command from.
+ * @param label If upcoming command has a label it is passed here (0 otherwise).
+ * @return ERR_SUCCESS on success.
+ */
 Errc parse_command(ParserState *parser, const uint32_t line_num, const char *buffer, Label *label)
 {
     CommandType type = 0;
@@ -313,6 +385,14 @@ Errc parse_command(ParserState *parser, const uint32_t line_num, const char *buf
     return ERR_INVALID_MNEMONIC;
 }
 
+
+/**
+ * @brief Parse a given line.
+ * @param parser State
+ * @param line_num Source code line number of this line.
+ * @param line Line
+ * @return ERR_SUCCESS on success
+ */
 Errc parse_line(ParserState *parser, const uint32_t line_num, const char *line)
 {
     const char *cur = line;
@@ -385,6 +465,8 @@ Errc parse_line(ParserState *parser, const uint32_t line_num, const char *line)
     return parse_command(parser, line_num, cur, label);
 }
 
+
+
 Errc parse_file(ParserState *parser, FILE *file)
 {
     char buffer[MAX_LINE_LENGTH + 1];
@@ -430,6 +512,7 @@ Errc parse_file(ParserState *parser, FILE *file)
 
     return check_result(parser);
 }
+
 
 void init_parser(ParserState *parser)
 {

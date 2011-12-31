@@ -36,6 +36,10 @@ typedef struct Label Label;
 typedef struct Command Command;
 typedef struct ParserState ParserState;
 
+
+/**
+ * @brief LL-entry for representing memory(/variable) storage in a SPASM application.
+ */
 struct MemoryLocation
 {
     enum MemoryLocationType
@@ -57,6 +61,10 @@ struct MemoryLocation
     MemoryLocation *next;
 };
 
+
+/**
+ * @brief LL-entry for holding a named label pointing to a SPASM Command.
+ */
 struct Label
 {
     char name[MAX_SYMBOL_NAME_LENGTH]; /* name for this label */
@@ -66,6 +74,10 @@ struct Label
     Label *next;
 };
 
+
+/**
+ * @brief Enumeration of all command types in the SPASM language.
+ */
 typedef enum CommandType
 {
 
@@ -91,17 +103,17 @@ typedef enum CommandType
      * Memory operations
      */
 
-    SPASM_LA,  /* push(memory_arg->vaddr) */
+    SPASM_LA,  /* push(memory_arg->vaddr/4) */
     SPASM_LC,  /* push(constant) */
     SPASM_LV,  /* push(*pop()) */
-    SPASM_STR, /* *pop() = pop() */
+    SPASM_STR, /* *(pop() * 4) = pop() */
 
     /*
      * IO operations
      */
 
-    SPASM_PRI, /* print_uint(pop()) */
-    SPASM_REA, /* push(read_uint()) */
+    SPASM_PRI, /* print_int(pop()) */
+    SPASM_REA, /* push(read_int()) */
 
     /*
      * Control flow operations
@@ -117,21 +129,26 @@ typedef enum CommandType
     SPASM_DS
 } CommandType;
 
+
 /**
  * Index in this array equals CommandType
  */
 extern const char SPASM_MNEMONICS[][MAX_MNEMONIC_LENGTH + 1];
 
+
+/**
+ * @brief LL-entry for holding a single SPASM application command (e.g. LC 1).
+ */
 struct Command
 {
     CommandType type;
 
     union CommandArgument
     {
-        Label *label_arg;
-        MemoryLocation *memory_arg;
-        uint32_t constant_arg;
-    } argument;
+        Label *label_arg;           /* Label argument (e.g. JMP cmds) */
+        MemoryLocation *memory_arg; /* Address argument (e.g. LA) */
+        uint32_t constant_arg;      /* Constant argument (e.g. LC) */
+    } argument; /* Argument of this command. Ignored for commands without argument. */
 
     Label *label; /* Label pointing to this command, 0 if none */
     uint32_t source_line; /* source code line this location was defined at */
@@ -141,32 +158,40 @@ struct Command
     Command *next;
 };
 
+
+/**
+ * @brief Structure for holding and processing a SPASM application AST.
+ */
 struct ParserState
 {
     uint32_t bss_used;
     uint32_t rodata_used;
     uint32_t data_used;
 
-    MemoryLocation *memory_location_first;
+    MemoryLocation *memory_location_first; /* root of memory location list */
     MemoryLocation *memory_location_last;
 
-    Label *label_first;
+    Label *label_first; /* root of label list */
     Label *label_last;
 
-    Command *command_first;
+    Command *command_first; /* root of command list */
     Command *command_last;
 
-    uint32_t last_line;
+    uint32_t last_line; /* Last source line processed by the parser */
 };
 
 typedef int Errc;
 
+
+/**
+ * @brief Enumeration of possible error codes.
+ */
 enum ErrcCode
 {
     ERR_SUCCESS,
 
-    ERR_IO,
-    ERR_ALLOC,
+    ERR_IO, /* System I/O error */
+    ERR_ALLOC, /* Allocation failure */
     ERR_LINE_TO_LONG,
     ERR_SYNTAX,
     ERR_UNDEFINED_VARIABLE,
@@ -176,11 +201,14 @@ enum ErrcCode
     ERR_CONSTANT_RANGE,
     ERR_INVALID_MNEMONIC,
     ERR_NO_COMMANDS,
-
-    ERR_WRITE,
-    ERR_INTERNAL
+    ERR_INTERNAL /* Internal spasm failure */
 };
 
+
+/*
+ * @brief Mapping between ErrcCode and string representation
+ */
 extern const char SPASM_ERR_STR[][128];
+
 
 #endif /* SPASM_TYPES_H_ */

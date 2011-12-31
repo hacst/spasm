@@ -27,6 +27,12 @@
 #ifndef SPASM_WRITER_H_
 #define SPASM_WRITER_H_
 
+/**
+ * @brief Writes the program contained in the ParserState as an elf binary
+ *        into the given file.
+ * @param file File handle to write executable to.
+ * @return ERRC_SUCCESS in case of success.
+ */
 Errc write_program(ParserState *parser, FILE *file);
 
 #endif /* SPASM_WRITER_H_ */

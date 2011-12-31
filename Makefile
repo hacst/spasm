@@ -1,4 +1,5 @@
 C = gcc
+#C = clang
 ifeq ($(mode),release)
 	CFLAGS = -O3 -pedantic -pedantic-errors -Wall -std=c89
 else
