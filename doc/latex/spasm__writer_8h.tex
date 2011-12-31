@@ -1,0 +1,36 @@
+\hypertarget{spasm__writer_8h}{
+\section{\-S\-:/dev/spasm/spasm\-\_\-writer.h \-File \-Reference}
+\label{spasm__writer_8h}\index{\-S\-:/dev/spasm/spasm\-\_\-writer.\-h@{\-S\-:/dev/spasm/spasm\-\_\-writer.\-h}}
+}
+{\ttfamily \#include $<$stdio.\-h$>$}\*
+{\ttfamily \#include \char`\"{}spasm\-\_\-types.\-h\char`\"{}}\*
+\subsection*{\-Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{spasm__types_8h_ace0c4399731107108a54bc7b37a1ab60}{\-Errc} \hyperlink{spasm__writer_8h_aa7d7c6d8c22bb2e09ba3fd2e49bc5aa6}{write\-\_\-program} (\hyperlink{struct_parser_state}{\-Parser\-State} $\ast$parser, \-F\-I\-L\-E $\ast$file)
+\begin{DoxyCompactList}\small\item\em \-Writes the program contained in the \hyperlink{struct_parser_state}{\-Parser\-State} as an elf binary into the given file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{\-Function \-Documentation}
+\hypertarget{spasm__writer_8h_aa7d7c6d8c22bb2e09ba3fd2e49bc5aa6}{
+\index{spasm\-\_\-writer.\-h@{spasm\-\_\-writer.\-h}!write\-\_\-program@{write\-\_\-program}}
+\index{write\-\_\-program@{write\-\_\-program}!spasm_writer.h@{spasm\-\_\-writer.\-h}}
+\subsubsection[{write\-\_\-program}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-Errc} write\-\_\-program (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Parser\-State} $\ast$}]{parser, }
+\item[{\-F\-I\-L\-E $\ast$}]{file}
+\end{DoxyParamCaption}
+)}}
+\label{spasm__writer_8h_aa7d7c6d8c22bb2e09ba3fd2e49bc5aa6}
+
+
+\-Writes the program contained in the \hyperlink{struct_parser_state}{\-Parser\-State} as an elf binary into the given file. 
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em file} & \-File handle to write executable to. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{\-Returns}
+\-E\-R\-R\-C\-\_\-\-S\-U\-C\-C\-E\-S\-S in case of success. 
+\end{DoxyReturn}

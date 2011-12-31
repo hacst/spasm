@@ -1,0 +1,109 @@
+\hypertarget{elfwrite_8h}{
+\section{\-S\-:/dev/spasm/helpers/elfwrite.h \-File \-Reference}
+\label{elfwrite_8h}\index{\-S\-:/dev/spasm/helpers/elfwrite.\-h@{\-S\-:/dev/spasm/helpers/elfwrite.\-h}}
+}
+{\ttfamily \#include $<$stdio.\-h$>$}\*
+{\ttfamily \#include $<$stdint.\-h$>$}\*
+\subsection*{\-Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{elfwrite_8h_afa5f687c8a7afd293868c7b88522879f}{elf\-\_\-write} (\-F\-I\-L\-E $\ast$file, uint32\-\_\-t entry\-\_\-point, uint32\-\_\-t text\-\_\-vaddr, const unsigned char $\ast$text, size\-\_\-t text\-\_\-size, uint32\-\_\-t rodata\-\_\-vaddr, const unsigned char $\ast$rodata, size\-\_\-t rodata\-\_\-size, uint32\-\_\-t data\-\_\-vaddr, const unsigned char $\ast$data, size\-\_\-t data\-\_\-size, uint32\-\_\-t bss\-\_\-vaddr, size\-\_\-t bss\-\_\-size)
+\begin{DoxyCompactList}\small\item\em \-Writes an \-E\-L\-F executable with the given parameters to the given file. \end{DoxyCompactList}\item 
+void \hyperlink{elfwrite_8h_a9191215780029146cb086180d2448de1}{elf\-\_\-optimize\-\_\-alignment} (uint32\-\_\-t base\-\_\-vaddr, uint32\-\_\-t text\-\_\-size, uint32\-\_\-t rodata\-\_\-size, uint32\-\_\-t data\-\_\-size, uint32\-\_\-t $\ast$text\-\_\-vaddr, uint32\-\_\-t $\ast$rodata\-\_\-vaddr, uint32\-\_\-t $\ast$data\-\_\-vaddr, uint32\-\_\-t $\ast$bss\-\_\-vaddr)
+\begin{DoxyCompactList}\small\item\em \-Return a set of addresses for the required sizes that prevent padding from being required in files written with elf\-\_\-write. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{\-Function \-Documentation}
+\hypertarget{elfwrite_8h_a9191215780029146cb086180d2448de1}{
+\index{elfwrite.\-h@{elfwrite.\-h}!elf\-\_\-optimize\-\_\-alignment@{elf\-\_\-optimize\-\_\-alignment}}
+\index{elf\-\_\-optimize\-\_\-alignment@{elf\-\_\-optimize\-\_\-alignment}!elfwrite.h@{elfwrite.\-h}}
+\subsubsection[{elf\-\_\-optimize\-\_\-alignment}]{\setlength{\rightskip}{0pt plus 5cm}void elf\-\_\-optimize\-\_\-alignment (
+\begin{DoxyParamCaption}
+\item[{uint32\-\_\-t}]{base\-\_\-vaddr, }
+\item[{uint32\-\_\-t}]{text\-\_\-size, }
+\item[{uint32\-\_\-t}]{rodata\-\_\-size, }
+\item[{uint32\-\_\-t}]{data\-\_\-size, }
+\item[{uint32\-\_\-t $\ast$}]{text\-\_\-vaddr, }
+\item[{uint32\-\_\-t $\ast$}]{rodata\-\_\-vaddr, }
+\item[{uint32\-\_\-t $\ast$}]{data\-\_\-vaddr, }
+\item[{uint32\-\_\-t $\ast$}]{bss\-\_\-vaddr}
+\end{DoxyParamCaption}
+)}}
+\label{elfwrite_8h_a9191215780029146cb086180d2448de1}
+
+
+\-Return a set of addresses for the required sizes that prevent padding from being required in files written with elf\-\_\-write. 
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em base\-\_\-vaddr} & \-Lowest vaddr to consider. \\
+\hline
+{\em text\-\_\-size} & \-Size of text segment \\
+\hline
+{\em rodata\-\_\-size} & \-Size of rodata segment \\
+\hline
+{\em data\-\_\-size} & \-Size of data segment \\
+\hline
+{\em text\-\_\-vaddr} & \-Target variable for optimal text vaddr. \\
+\hline
+{\em rodata\-\_\-vaddr} & \-Target variable for optimal rodata vaddr. \\
+\hline
+{\em data\-\_\-vaddr} & \-Target variable for optimal data vaddr. \\
+\hline
+{\em bss\-\_\-vaddr} & \-Target variable for optimal bss vaddr. \\
+\hline
+\end{DoxyParams}
+\hypertarget{elfwrite_8h_afa5f687c8a7afd293868c7b88522879f}{
+\index{elfwrite.\-h@{elfwrite.\-h}!elf\-\_\-write@{elf\-\_\-write}}
+\index{elf\-\_\-write@{elf\-\_\-write}!elfwrite.h@{elfwrite.\-h}}
+\subsubsection[{elf\-\_\-write}]{\setlength{\rightskip}{0pt plus 5cm}void elf\-\_\-write (
+\begin{DoxyParamCaption}
+\item[{\-F\-I\-L\-E $\ast$}]{file, }
+\item[{uint32\-\_\-t}]{entry\-\_\-point, }
+\item[{uint32\-\_\-t}]{text\-\_\-vaddr, }
+\item[{const unsigned char $\ast$}]{text, }
+\item[{size\-\_\-t}]{text\-\_\-size, }
+\item[{uint32\-\_\-t}]{rodata\-\_\-vaddr, }
+\item[{const unsigned char $\ast$}]{rodata, }
+\item[{size\-\_\-t}]{rodata\-\_\-size, }
+\item[{uint32\-\_\-t}]{data\-\_\-vaddr, }
+\item[{const unsigned char $\ast$}]{data, }
+\item[{size\-\_\-t}]{data\-\_\-size, }
+\item[{uint32\-\_\-t}]{bss\-\_\-vaddr, }
+\item[{size\-\_\-t}]{bss\-\_\-size}
+\end{DoxyParamCaption}
+)}}
+\label{elfwrite_8h_afa5f687c8a7afd293868c7b88522879f}
+
+
+\-Writes an \-E\-L\-F executable with the given parameters to the given file. 
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em file} & \-File to write to \\
+\hline
+{\em entry\-\_\-point} & \-Virtual address of entry point \\
+\hline
+{\em text\-\_\-vaddr} & \-Address to load .text segment to \\
+\hline
+{\em text} & \-Code to write \\
+\hline
+{\em text\-\_\-size} & \-Size of the given code \\
+\hline
+{\em rodata\-\_\-vaddr} & \-Address to load .rodata segment to \\
+\hline
+{\em rodata} & \-Read only data to write \\
+\hline
+{\em rodata\-\_\-size} & \-Size of the given read only data \\
+\hline
+{\em data\-\_\-vaddr} & \-Address to load .data segment to \\
+\hline
+{\em data} & \-Writable data to write (== initialized variables) \\
+\hline
+{\em data\-\_\-size} & \-Size of the given writable data \\
+\hline
+{\em bss\-\_\-vaddr} & \-Address to put the zero initialized writable segment at (== 0 initialized variables) \\
+\hline
+{\em bss\-\_\-size} & \-Size to reserve for the zero initialized data \\
+\hline
+\end{DoxyParams}

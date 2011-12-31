@@ -1,0 +1,367 @@
+\hypertarget{spasm__parser_8c}{
+\section{\-S\-:/dev/spasm/spasm\-\_\-parser.c \-File \-Reference}
+\label{spasm__parser_8c}\index{\-S\-:/dev/spasm/spasm\-\_\-parser.\-c@{\-S\-:/dev/spasm/spasm\-\_\-parser.\-c}}
+}
+{\ttfamily \#include \char`\"{}spasm\-\_\-parser.\-h\char`\"{}}\*
+{\ttfamily \#include $<$string.\-h$>$}\*
+{\ttfamily \#include $<$stdint.\-h$>$}\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\*
+{\ttfamily \#include $<$assert.\-h$>$}\*
+{\ttfamily \#include $<$ctype.\-h$>$}\*
+{\ttfamily \#include $<$errno.\-h$>$}\*
+\subsection*{\-Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{struct_label}{\-Label} $\ast$ \hyperlink{spasm__parser_8c_aad3e91d17812025580b1c65a58c55313}{get\-\_\-label} (\hyperlink{struct_parser_state}{\-Parser\-State} $\ast$parser, const char $\ast$name, const size\-\_\-t len)
+\begin{DoxyCompactList}\small\item\em \-Return a \hyperlink{struct_label}{\-Label} by name. \end{DoxyCompactList}\item 
+\hyperlink{struct_label}{\-Label} $\ast$ \hyperlink{spasm__parser_8c_a5f694685bc60f952f1c446a14bd80a83}{get\-\_\-or\-\_\-insert\-\_\-label} (\hyperlink{struct_parser_state}{\-Parser\-State} $\ast$parser, const char $\ast$name, const size\-\_\-t len)
+\begin{DoxyCompactList}\small\item\em \-Return existing or, alternatively, newly created label by name. \end{DoxyCompactList}\item 
+\hyperlink{struct_memory_location}{\-Memory\-Location} $\ast$ \hyperlink{spasm__parser_8c_a52ad097ee8f7ba9e583b01d957b26d3e}{get\-\_\-bss\-\_\-variable} (\hyperlink{struct_parser_state}{\-Parser\-State} $\ast$parser, const char $\ast$name, const size\-\_\-t len)
+\begin{DoxyCompactList}\small\item\em \-Return bss memory location by name. \end{DoxyCompactList}\item 
+\hyperlink{struct_memory_location}{\-Memory\-Location} $\ast$ \hyperlink{spasm__parser_8c_aedc003913f6857edcd686226c086a30f}{insert\-\_\-bss\-\_\-variable} (\hyperlink{struct_parser_state}{\-Parser\-State} $\ast$parser, const char $\ast$name, const size\-\_\-t len, const uint32\-\_\-t size, const uint32\-\_\-t line\-\_\-num)
+\begin{DoxyCompactList}\small\item\em \-Create new bss memory location with given parameters. \end{DoxyCompactList}\item 
+\hyperlink{spasm__types_8h_ace0c4399731107108a54bc7b37a1ab60}{\-Errc} \hyperlink{spasm__parser_8c_a6397f84842fa4f49cefc7aa67dbe531f}{check\-\_\-result} (\hyperlink{struct_parser_state}{\-Parser\-State} $\ast$parser)
+\begin{DoxyCompactList}\small\item\em \-Checks the given state for errors. \end{DoxyCompactList}\item 
+const char $\ast$ \hyperlink{spasm__parser_8c_a7b7b939b003a0081ccf078b5c68bf70d}{skip\-\_\-spaces} (const char $\ast$buffer)
+\begin{DoxyCompactList}\small\item\em \-Skip spaces and tabs in buffer. \end{DoxyCompactList}\item 
+const char $\ast$ \hyperlink{spasm__parser_8c_a0cb4b6246c1889d6bcddfd876e58ad0e}{skip\-\_\-alnums} (const char $\ast$buffer)
+\begin{DoxyCompactList}\small\item\em \-Skip alphanumeric characters in buffer. \end{DoxyCompactList}\item 
+\hyperlink{spasm__types_8h_ace0c4399731107108a54bc7b37a1ab60}{\-Errc} \hyperlink{spasm__parser_8c_a3cd0c4ab9250e00ac62dc86337ba8ee3}{read\-\_\-to\-\_\-end\-\_\-of\-\_\-line} (const char $\ast$buffer)
+\begin{DoxyCompactList}\small\item\em \-Ensure content of buffer till newline is whitespace or comment. \end{DoxyCompactList}\item 
+\hyperlink{struct_command}{\-Command} $\ast$ \hyperlink{spasm__parser_8c_a727f12f85fd8bf83f263fea9b7b9d9eb}{insert\-\_\-command} (\hyperlink{struct_parser_state}{\-Parser\-State} $\ast$parser, \hyperlink{spasm__types_8h_a21e038f5b8958e203d28bc4f18472352}{\-Command\-Type} type, uint32\-\_\-t line\-\_\-num, \hyperlink{struct_label}{\-Label} $\ast$label)
+\begin{DoxyCompactList}\small\item\em \-Store a new command with the given parameters. \end{DoxyCompactList}\item 
+\hyperlink{spasm__types_8h_ace0c4399731107108a54bc7b37a1ab60}{\-Errc} \hyperlink{spasm__parser_8c_a1c30cb20b1e3ced5eb5ceb9486f184dd}{parse\-\_\-command} (\hyperlink{struct_parser_state}{\-Parser\-State} $\ast$parser, const uint32\-\_\-t line\-\_\-num, const char $\ast$buffer, \hyperlink{struct_label}{\-Label} $\ast$label)
+\begin{DoxyCompactList}\small\item\em \-Parse a single command from given buffer. \end{DoxyCompactList}\item 
+\hyperlink{spasm__types_8h_ace0c4399731107108a54bc7b37a1ab60}{\-Errc} \hyperlink{spasm__parser_8c_a616714245f3512c6323e697d0ef3f779}{parse\-\_\-line} (\hyperlink{struct_parser_state}{\-Parser\-State} $\ast$parser, const uint32\-\_\-t line\-\_\-num, const char $\ast$line)
+\begin{DoxyCompactList}\small\item\em \-Parse a given line. \end{DoxyCompactList}\item 
+\hyperlink{spasm__types_8h_ace0c4399731107108a54bc7b37a1ab60}{\-Errc} \hyperlink{spasm__parser_8c_a481d541e3b97b556dcff14e89cfd8078}{parse\-\_\-file} (\hyperlink{struct_parser_state}{\-Parser\-State} $\ast$parser, \-F\-I\-L\-E $\ast$file)
+\begin{DoxyCompactList}\small\item\em \-Parses the given file updating the given \hyperlink{struct_parser_state}{\-Parser\-State}. \end{DoxyCompactList}\item 
+void \hyperlink{spasm__parser_8c_a8cacebd1abf4e3eeb7d9e5cf9263bd39}{init\-\_\-parser} (\hyperlink{struct_parser_state}{\-Parser\-State} $\ast$parser)
+\item 
+void \hyperlink{spasm__parser_8c_a8a2e2d797bb2b1315fd6ad32dbcf73fa}{cleanup\-\_\-parser} (\hyperlink{struct_parser_state}{\-Parser\-State} $\ast$parser)
+\begin{DoxyCompactList}\small\item\em \-Releases all memory held in the \hyperlink{struct_parser_state}{\-Parser\-State} and resets it.  \hyperlink{struct_parser_state}{\-Parser\-State} to reset. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{\-Function \-Documentation}
+\hypertarget{spasm__parser_8c_a6397f84842fa4f49cefc7aa67dbe531f}{
+\index{spasm\-\_\-parser.\-c@{spasm\-\_\-parser.\-c}!check\-\_\-result@{check\-\_\-result}}
+\index{check\-\_\-result@{check\-\_\-result}!spasm_parser.c@{spasm\-\_\-parser.\-c}}
+\subsubsection[{check\-\_\-result}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-Errc} check\-\_\-result (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Parser\-State} $\ast$}]{parser}
+\end{DoxyParamCaption}
+)}}
+\label{spasm__parser_8c_a6397f84842fa4f49cefc7aa67dbe531f}
+
+
+\-Checks the given state for errors. 
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em parser} & \-State \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{\-Returns}
+\-E\-R\-R\-\_\-\-S\-U\-C\-C\-E\-S\-S if no error were found. 
+\end{DoxyReturn}
+\hypertarget{spasm__parser_8c_a8a2e2d797bb2b1315fd6ad32dbcf73fa}{
+\index{spasm\-\_\-parser.\-c@{spasm\-\_\-parser.\-c}!cleanup\-\_\-parser@{cleanup\-\_\-parser}}
+\index{cleanup\-\_\-parser@{cleanup\-\_\-parser}!spasm_parser.c@{spasm\-\_\-parser.\-c}}
+\subsubsection[{cleanup\-\_\-parser}]{\setlength{\rightskip}{0pt plus 5cm}void cleanup\-\_\-parser (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Parser\-State} $\ast$}]{parser}
+\end{DoxyParamCaption}
+)}}
+\label{spasm__parser_8c_a8a2e2d797bb2b1315fd6ad32dbcf73fa}
+
+
+\-Releases all memory held in the \hyperlink{struct_parser_state}{\-Parser\-State} and resets it.  \hyperlink{struct_parser_state}{\-Parser\-State} to reset. 
+
+\hypertarget{spasm__parser_8c_a52ad097ee8f7ba9e583b01d957b26d3e}{
+\index{spasm\-\_\-parser.\-c@{spasm\-\_\-parser.\-c}!get\-\_\-bss\-\_\-variable@{get\-\_\-bss\-\_\-variable}}
+\index{get\-\_\-bss\-\_\-variable@{get\-\_\-bss\-\_\-variable}!spasm_parser.c@{spasm\-\_\-parser.\-c}}
+\subsubsection[{get\-\_\-bss\-\_\-variable}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-Memory\-Location}$\ast$ get\-\_\-bss\-\_\-variable (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Parser\-State} $\ast$}]{parser, }
+\item[{const char $\ast$}]{name, }
+\item[{const size\-\_\-t}]{len}
+\end{DoxyParamCaption}
+)}}
+\label{spasm__parser_8c_a52ad097ee8f7ba9e583b01d957b26d3e}
+
+
+\-Return bss memory location by name. 
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em parser} & \-State \\
+\hline
+{\em name} & \-Variable name \\
+\hline
+{\em len} & \-Length of name \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{\-Returns}
+$\ast$\-Memory\-Location or 0 if it could not be found. 
+\end{DoxyReturn}
+\hypertarget{spasm__parser_8c_aad3e91d17812025580b1c65a58c55313}{
+\index{spasm\-\_\-parser.\-c@{spasm\-\_\-parser.\-c}!get\-\_\-label@{get\-\_\-label}}
+\index{get\-\_\-label@{get\-\_\-label}!spasm_parser.c@{spasm\-\_\-parser.\-c}}
+\subsubsection[{get\-\_\-label}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-Label}$\ast$ get\-\_\-label (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Parser\-State} $\ast$}]{parser, }
+\item[{const char $\ast$}]{name, }
+\item[{const size\-\_\-t}]{len}
+\end{DoxyParamCaption}
+)}}
+\label{spasm__parser_8c_aad3e91d17812025580b1c65a58c55313}
+
+
+\-Return a \hyperlink{struct_label}{\-Label} by name. 
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em parser} & \-State \\
+\hline
+{\em name} & \hyperlink{struct_label}{\-Label} name \\
+\hline
+{\em len} & \-Lenght of name \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{\-Returns}
+$\ast$\-Label or 0 if it could not be found. 
+\end{DoxyReturn}
+\hypertarget{spasm__parser_8c_a5f694685bc60f952f1c446a14bd80a83}{
+\index{spasm\-\_\-parser.\-c@{spasm\-\_\-parser.\-c}!get\-\_\-or\-\_\-insert\-\_\-label@{get\-\_\-or\-\_\-insert\-\_\-label}}
+\index{get\-\_\-or\-\_\-insert\-\_\-label@{get\-\_\-or\-\_\-insert\-\_\-label}!spasm_parser.c@{spasm\-\_\-parser.\-c}}
+\subsubsection[{get\-\_\-or\-\_\-insert\-\_\-label}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-Label}$\ast$ get\-\_\-or\-\_\-insert\-\_\-label (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Parser\-State} $\ast$}]{parser, }
+\item[{const char $\ast$}]{name, }
+\item[{const size\-\_\-t}]{len}
+\end{DoxyParamCaption}
+)}}
+\label{spasm__parser_8c_a5f694685bc60f952f1c446a14bd80a83}
+
+
+\-Return existing or, alternatively, newly created label by name. 
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em parser} & \-State \\
+\hline
+{\em name} & \hyperlink{struct_label}{\-Label} name \\
+\hline
+{\em len} & \-Length of name \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{\-Returns}
+$\ast$\-Label 
+\end{DoxyReturn}
+\hypertarget{spasm__parser_8c_a8cacebd1abf4e3eeb7d9e5cf9263bd39}{
+\index{spasm\-\_\-parser.\-c@{spasm\-\_\-parser.\-c}!init\-\_\-parser@{init\-\_\-parser}}
+\index{init\-\_\-parser@{init\-\_\-parser}!spasm_parser.c@{spasm\-\_\-parser.\-c}}
+\subsubsection[{init\-\_\-parser}]{\setlength{\rightskip}{0pt plus 5cm}void init\-\_\-parser (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Parser\-State} $\ast$}]{parser}
+\end{DoxyParamCaption}
+)}}
+\label{spasm__parser_8c_a8cacebd1abf4e3eeb7d9e5cf9263bd39}
+\hypertarget{spasm__parser_8c_aedc003913f6857edcd686226c086a30f}{
+\index{spasm\-\_\-parser.\-c@{spasm\-\_\-parser.\-c}!insert\-\_\-bss\-\_\-variable@{insert\-\_\-bss\-\_\-variable}}
+\index{insert\-\_\-bss\-\_\-variable@{insert\-\_\-bss\-\_\-variable}!spasm_parser.c@{spasm\-\_\-parser.\-c}}
+\subsubsection[{insert\-\_\-bss\-\_\-variable}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-Memory\-Location}$\ast$ insert\-\_\-bss\-\_\-variable (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Parser\-State} $\ast$}]{parser, }
+\item[{const char $\ast$}]{name, }
+\item[{const size\-\_\-t}]{len, }
+\item[{const uint32\-\_\-t}]{size, }
+\item[{const uint32\-\_\-t}]{line\-\_\-num}
+\end{DoxyParamCaption}
+)}}
+\label{spasm__parser_8c_aedc003913f6857edcd686226c086a30f}
+
+
+\-Create new bss memory location with given parameters. 
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em parser} & \-State \\
+\hline
+{\em name} & \-Name of variable/location to create. \\
+\hline
+{\em len} & \-Length of name \\
+\hline
+{\em size} & \-Size of variable/location in bytes. \\
+\hline
+{\em line\-\_\-num} & \-Source code reference line for this variable/location. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{\-Returns}
+\-Newly created variable. 
+\end{DoxyReturn}
+\hypertarget{spasm__parser_8c_a727f12f85fd8bf83f263fea9b7b9d9eb}{
+\index{spasm\-\_\-parser.\-c@{spasm\-\_\-parser.\-c}!insert\-\_\-command@{insert\-\_\-command}}
+\index{insert\-\_\-command@{insert\-\_\-command}!spasm_parser.c@{spasm\-\_\-parser.\-c}}
+\subsubsection[{insert\-\_\-command}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-Command}$\ast$ insert\-\_\-command (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Parser\-State} $\ast$}]{parser, }
+\item[{{\bf \-Command\-Type}}]{type, }
+\item[{uint32\-\_\-t}]{line\-\_\-num, }
+\item[{{\bf \-Label} $\ast$}]{label}
+\end{DoxyParamCaption}
+)}}
+\label{spasm__parser_8c_a727f12f85fd8bf83f263fea9b7b9d9eb}
+
+
+\-Store a new command with the given parameters. 
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em parser} & \-State \\
+\hline
+{\em type} & \hyperlink{struct_command}{\-Command} type \\
+\hline
+{\em line\-\_\-num} & \-Source code line number associated with this command \\
+\hline
+{\em label} & \hyperlink{struct_label}{\-Label} associated with this command (0 if none) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{\-Returns}
+$\ast$\-Created command 
+\end{DoxyReturn}
+\hypertarget{spasm__parser_8c_a1c30cb20b1e3ced5eb5ceb9486f184dd}{
+\index{spasm\-\_\-parser.\-c@{spasm\-\_\-parser.\-c}!parse\-\_\-command@{parse\-\_\-command}}
+\index{parse\-\_\-command@{parse\-\_\-command}!spasm_parser.c@{spasm\-\_\-parser.\-c}}
+\subsubsection[{parse\-\_\-command}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-Errc} parse\-\_\-command (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Parser\-State} $\ast$}]{parser, }
+\item[{const uint32\-\_\-t}]{line\-\_\-num, }
+\item[{const char $\ast$}]{buffer, }
+\item[{{\bf \-Label} $\ast$}]{label}
+\end{DoxyParamCaption}
+)}}
+\label{spasm__parser_8c_a1c30cb20b1e3ced5eb5ceb9486f184dd}
+
+
+\-Parse a single command from given buffer. 
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em parser} & \-State \\
+\hline
+{\em line\-\_\-num} & \-Current source code line number. \\
+\hline
+{\em buffer} & \-Buffer to parse command from. \\
+\hline
+{\em label} & \-If upcoming command has a label it is passed here (0 otherwise). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{\-Returns}
+\-E\-R\-R\-\_\-\-S\-U\-C\-C\-E\-S\-S on success. 
+\end{DoxyReturn}
+\hypertarget{spasm__parser_8c_a481d541e3b97b556dcff14e89cfd8078}{
+\index{spasm\-\_\-parser.\-c@{spasm\-\_\-parser.\-c}!parse\-\_\-file@{parse\-\_\-file}}
+\index{parse\-\_\-file@{parse\-\_\-file}!spasm_parser.c@{spasm\-\_\-parser.\-c}}
+\subsubsection[{parse\-\_\-file}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-Errc} parse\-\_\-file (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Parser\-State} $\ast$}]{parser, }
+\item[{\-F\-I\-L\-E $\ast$}]{file}
+\end{DoxyParamCaption}
+)}}
+\label{spasm__parser_8c_a481d541e3b97b556dcff14e89cfd8078}
+
+
+\-Parses the given file updating the given \hyperlink{struct_parser_state}{\-Parser\-State}. 
+
+\begin{DoxyNote}{\-Note}
+\-Make sure to always release the memory allocated in the parser structure using cleanup\-\_\-parser even if the parse\-\_\-file call failed.
+\end{DoxyNote}
+
+\begin{DoxyParams}{\-Parameters}
+{\em parser} & \hyperlink{struct_parser_state}{\-Parser\-State} to update \\
+\hline
+{\em file} & \-File to parse \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{\-Returns}
+\-Error 
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{\-See also}
+\hyperlink{spasm__types_8h_ac77c2d54787a5c0e15f260549ec15c05}{\-Errc\-Code} 
+\end{DoxySeeAlso}
+\hypertarget{spasm__parser_8c_a616714245f3512c6323e697d0ef3f779}{
+\index{spasm\-\_\-parser.\-c@{spasm\-\_\-parser.\-c}!parse\-\_\-line@{parse\-\_\-line}}
+\index{parse\-\_\-line@{parse\-\_\-line}!spasm_parser.c@{spasm\-\_\-parser.\-c}}
+\subsubsection[{parse\-\_\-line}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-Errc} parse\-\_\-line (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Parser\-State} $\ast$}]{parser, }
+\item[{const uint32\-\_\-t}]{line\-\_\-num, }
+\item[{const char $\ast$}]{line}
+\end{DoxyParamCaption}
+)}}
+\label{spasm__parser_8c_a616714245f3512c6323e697d0ef3f779}
+
+
+\-Parse a given line. 
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em parser} & \-State \\
+\hline
+{\em line\-\_\-num} & \-Source code line number of this line. \\
+\hline
+{\em line} & \-Line \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{\-Returns}
+\-E\-R\-R\-\_\-\-S\-U\-C\-C\-E\-S\-S on success 
+\end{DoxyReturn}
+\hypertarget{spasm__parser_8c_a3cd0c4ab9250e00ac62dc86337ba8ee3}{
+\index{spasm\-\_\-parser.\-c@{spasm\-\_\-parser.\-c}!read\-\_\-to\-\_\-end\-\_\-of\-\_\-line@{read\-\_\-to\-\_\-end\-\_\-of\-\_\-line}}
+\index{read\-\_\-to\-\_\-end\-\_\-of\-\_\-line@{read\-\_\-to\-\_\-end\-\_\-of\-\_\-line}!spasm_parser.c@{spasm\-\_\-parser.\-c}}
+\subsubsection[{read\-\_\-to\-\_\-end\-\_\-of\-\_\-line}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-Errc} read\-\_\-to\-\_\-end\-\_\-of\-\_\-line (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{buffer}
+\end{DoxyParamCaption}
+)}}
+\label{spasm__parser_8c_a3cd0c4ab9250e00ac62dc86337ba8ee3}
+
+
+\-Ensure content of buffer till newline is whitespace or comment. 
+
+\begin{DoxyReturn}{\-Returns}
+\-E\-R\-R\-\_\-\-S\-U\-C\-C\-E\-S\-S if \-E\-O\-L was reached. \-E\-R\-R\-\_\-\-S\-Y\-N\-T\-A\-X if unexpected characters were found. 
+\end{DoxyReturn}
+\hypertarget{spasm__parser_8c_a0cb4b6246c1889d6bcddfd876e58ad0e}{
+\index{spasm\-\_\-parser.\-c@{spasm\-\_\-parser.\-c}!skip\-\_\-alnums@{skip\-\_\-alnums}}
+\index{skip\-\_\-alnums@{skip\-\_\-alnums}!spasm_parser.c@{spasm\-\_\-parser.\-c}}
+\subsubsection[{skip\-\_\-alnums}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ skip\-\_\-alnums (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{buffer}
+\end{DoxyParamCaption}
+)}}
+\label{spasm__parser_8c_a0cb4b6246c1889d6bcddfd876e58ad0e}
+
+
+\-Skip alphanumeric characters in buffer. 
+
+\begin{DoxyReturn}{\-Returns}
+buffer advanced by skipped characters. 
+\end{DoxyReturn}
+\hypertarget{spasm__parser_8c_a7b7b939b003a0081ccf078b5c68bf70d}{
+\index{spasm\-\_\-parser.\-c@{spasm\-\_\-parser.\-c}!skip\-\_\-spaces@{skip\-\_\-spaces}}
+\index{skip\-\_\-spaces@{skip\-\_\-spaces}!spasm_parser.c@{spasm\-\_\-parser.\-c}}
+\subsubsection[{skip\-\_\-spaces}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ skip\-\_\-spaces (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{buffer}
+\end{DoxyParamCaption}
+)}}
+\label{spasm__parser_8c_a7b7b939b003a0081ccf078b5c68bf70d}
+
+
+\-Skip spaces and tabs in buffer. 
+
+\begin{DoxyReturn}{\-Returns}
+buffer advanced by skipped characters. 
+\end{DoxyReturn}

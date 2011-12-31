@@ -1,0 +1,364 @@
+\hypertarget{spasm__writer_8c}{
+\section{\-S\-:/dev/spasm/spasm\-\_\-writer.c \-File \-Reference}
+\label{spasm__writer_8c}\index{\-S\-:/dev/spasm/spasm\-\_\-writer.\-c@{\-S\-:/dev/spasm/spasm\-\_\-writer.\-c}}
+}
+{\ttfamily \#include \char`\"{}spasm\-\_\-writer.\-h\char`\"{}}\*
+{\ttfamily \#include \char`\"{}spasm\-\_\-commands.\-h\char`\"{}}\*
+{\ttfamily \#include \char`\"{}helpers/elfwrite.\-h\char`\"{}}\*
+{\ttfamily \#include $<$memory.\-h$>$}\*
+{\ttfamily \#include $<$assert.\-h$>$}\*
+{\ttfamily \#include $<$stdint.\-h$>$}\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\*
+\subsection*{\-Data \-Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct_spasm_builtins}{\-Spasm\-Builtins}
+\begin{DoxyCompactList}\small\item\em \-Structure for passing builtin function virtual addresses around. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{\-Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{struct_spasm_builtins}{\-Spasm\-Builtins} \hyperlink{spasm__writer_8c_af06e165401ff4cfcde18625780c9793e}{\-Spasm\-Builtins}
+\end{DoxyCompactItemize}
+\subsection*{\-Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{spasm__types_8h_ace0c4399731107108a54bc7b37a1ab60}{\-Errc} \hyperlink{spasm__writer_8c_ae7a4e5a711f1f37cffbfc7ba4bb9da79}{write\-\_\-with\-\_\-single\-\_\-replacement} (const unsigned char command\mbox{[}$\,$\mbox{]}, const size\-\_\-t command\-\_\-size, const size\-\_\-t command\-\_\-data\-\_\-offset, const uint32\-\_\-t data, unsigned char $\ast$$\ast$buffer)
+\begin{DoxyCompactList}\small\item\em \-Write a command with a single uint32\-\_\-t replacement. \end{DoxyCompactList}\item 
+\hyperlink{spasm__types_8h_ace0c4399731107108a54bc7b37a1ab60}{\-Errc} \hyperlink{spasm__writer_8c_a88276a118aa5f959b8ec7437968f6bbe}{write\-\_\-with\-\_\-replacements} (const unsigned char command\mbox{[}$\,$\mbox{]}, size\-\_\-t command\-\_\-size, const uint32\-\_\-t offsets\mbox{[}$\,$\mbox{]}, const uint32\-\_\-t replacements\mbox{[}$\,$\mbox{]}, const size\-\_\-t replacement\-\_\-count, unsigned char $\ast$$\ast$buffer)
+\begin{DoxyCompactList}\small\item\em \-Write a command wit multiple uint32\-\_\-t replacements. \end{DoxyCompactList}\item 
+\hyperlink{spasm__types_8h_ace0c4399731107108a54bc7b37a1ab60}{\-Errc} \hyperlink{spasm__writer_8c_a5adb72f370ac27c35f85e6798d0af90c}{write\-\_\-spasm\-\_\-readint32} (const uint32\-\_\-t rodata\-\_\-vaddr\-\_\-base, const uint32\-\_\-t data\-\_\-vaddr\-\_\-base, unsigned char $\ast$$\ast$buffer)
+\begin{DoxyCompactList}\small\item\em \-Write the builtin spasm\-\_\-readint32 command to the given buffer. \end{DoxyCompactList}\item 
+\hyperlink{spasm__types_8h_ace0c4399731107108a54bc7b37a1ab60}{\-Errc} \hyperlink{spasm__writer_8c_a9f1628d985d0d00336f724af708740ae}{write\-\_\-spasm\-\_\-writeint32} (const uint32\-\_\-t data\-\_\-vaddr\-\_\-base, unsigned char $\ast$$\ast$buffer)
+\begin{DoxyCompactList}\small\item\em \-Write the builtin spasm\-\_\-writeint32 command to the given buffer. \end{DoxyCompactList}\item 
+\hyperlink{spasm__types_8h_ace0c4399731107108a54bc7b37a1ab60}{\-Errc} \hyperlink{spasm__writer_8c_af2213edaf399c678c1db802338333ca6}{write\-\_\-command} (const \hyperlink{struct_command}{\-Command} $\ast$command, unsigned char $\ast$$\ast$buffer, const \hyperlink{struct_spasm_builtins}{\-Spasm\-Builtins} $\ast$builtins)
+\begin{DoxyCompactList}\small\item\em \-Writes the implementation of a given command to the given buffer. \end{DoxyCompactList}\item 
+\hyperlink{spasm__types_8h_ace0c4399731107108a54bc7b37a1ab60}{\-Errc} \hyperlink{spasm__writer_8c_a755f16bbd5c2bef3298e36257f656054}{write\-\_\-text} (const \hyperlink{struct_parser_state}{\-Parser\-State} $\ast$parser, unsigned char $\ast$buffer, const \hyperlink{struct_spasm_builtins}{\-Spasm\-Builtins} $\ast$builtins)
+\begin{DoxyCompactList}\small\item\em \-Writes the text segment part of the \hyperlink{struct_parser_state}{\-Parser\-State} into the given buffer. \end{DoxyCompactList}\item 
+\hyperlink{spasm__types_8h_ace0c4399731107108a54bc7b37a1ab60}{\-Errc} \hyperlink{spasm__writer_8c_ad7e2bdf840e8358620b43ce03d67a009}{write\-\_\-xdata} (const \hyperlink{struct_parser_state}{\-Parser\-State} $\ast$parser, unsigned char $\ast$data\-\_\-buffer, unsigned char $\ast$rodata\-\_\-buffer)
+\begin{DoxyCompactList}\small\item\em \-Write data/rodata part of \hyperlink{struct_parser_state}{\-Parser\-State} into given buffers. \end{DoxyCompactList}\item 
+size\-\_\-t \hyperlink{spasm__writer_8c_af206a164ec59920ae912b39cd0d87b10}{update\-\_\-parser\-\_\-state\-\_\-vaddr\-\_\-info} (\hyperlink{struct_parser_state}{\-Parser\-State} $\ast$parser, uint32\-\_\-t text\-\_\-vaddr, uint32\-\_\-t bss\-\_\-vaddr, uint32\-\_\-t rodata\-\_\-vaddr, uint32\-\_\-t data\-\_\-vaddr)
+\begin{DoxyCompactList}\small\item\em \-Walk given \hyperlink{struct_parser_state}{\-Parser\-State} and set actual virtual addresses of memory and commands. \end{DoxyCompactList}\item 
+\hyperlink{spasm__types_8h_ace0c4399731107108a54bc7b37a1ab60}{\-Errc} \hyperlink{spasm__writer_8c_aa7d7c6d8c22bb2e09ba3fd2e49bc5aa6}{write\-\_\-program} (\hyperlink{struct_parser_state}{\-Parser\-State} $\ast$parser, \-F\-I\-L\-E $\ast$file)
+\begin{DoxyCompactList}\small\item\em \-Writes the program contained in the \hyperlink{struct_parser_state}{\-Parser\-State} as an elf binary into the given file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{\-Variables}
+\begin{DoxyCompactItemize}
+\item 
+const unsigned char $\ast$ \hyperlink{spasm__writer_8c_a78ed35ef304dc7b92926bf78a0009e1e}{\-S\-P\-A\-S\-M\-\_\-\-C\-O\-M\-M\-A\-N\-D\-T\-Y\-P\-E\-\_\-\-T\-O\-\_\-\-C\-O\-M\-M\-A\-N\-D} \mbox{[}$\,$\mbox{]}
+\begin{DoxyCompactList}\small\item\em \-Command\-Type to \hyperlink{struct_command}{\-Command} implementation mapper. \end{DoxyCompactList}\item 
+const size\-\_\-t \hyperlink{spasm__writer_8c_a12d4acaeb7d224bceb458dca88d230ef}{\-S\-P\-A\-S\-M\-\_\-\-C\-O\-M\-M\-A\-N\-D\-T\-Y\-P\-E\-\_\-\-T\-O\-\_\-\-C\-O\-M\-M\-A\-N\-D\-\_\-\-S\-I\-Z\-E} \mbox{[}$\,$\mbox{]}
+\begin{DoxyCompactList}\small\item\em \-Command\-Type to implementation size mapper. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{\-Typedef \-Documentation}
+\hypertarget{spasm__writer_8c_af06e165401ff4cfcde18625780c9793e}{
+\index{spasm\-\_\-writer.\-c@{spasm\-\_\-writer.\-c}!\-Spasm\-Builtins@{\-Spasm\-Builtins}}
+\index{\-Spasm\-Builtins@{\-Spasm\-Builtins}!spasm_writer.c@{spasm\-\_\-writer.\-c}}
+\subsubsection[{\-Spasm\-Builtins}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \-Spasm\-Builtins} {\bf \-Spasm\-Builtins}}}
+\label{spasm__writer_8c_af06e165401ff4cfcde18625780c9793e}
+
+
+\subsection{\-Function \-Documentation}
+\hypertarget{spasm__writer_8c_af206a164ec59920ae912b39cd0d87b10}{
+\index{spasm\-\_\-writer.\-c@{spasm\-\_\-writer.\-c}!update\-\_\-parser\-\_\-state\-\_\-vaddr\-\_\-info@{update\-\_\-parser\-\_\-state\-\_\-vaddr\-\_\-info}}
+\index{update\-\_\-parser\-\_\-state\-\_\-vaddr\-\_\-info@{update\-\_\-parser\-\_\-state\-\_\-vaddr\-\_\-info}!spasm_writer.c@{spasm\-\_\-writer.\-c}}
+\subsubsection[{update\-\_\-parser\-\_\-state\-\_\-vaddr\-\_\-info}]{\setlength{\rightskip}{0pt plus 5cm}size\-\_\-t update\-\_\-parser\-\_\-state\-\_\-vaddr\-\_\-info (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Parser\-State} $\ast$}]{parser, }
+\item[{uint32\-\_\-t}]{text\-\_\-vaddr, }
+\item[{uint32\-\_\-t}]{bss\-\_\-vaddr, }
+\item[{uint32\-\_\-t}]{rodata\-\_\-vaddr, }
+\item[{uint32\-\_\-t}]{data\-\_\-vaddr}
+\end{DoxyParamCaption}
+)}}
+\label{spasm__writer_8c_af206a164ec59920ae912b39cd0d87b10}
+
+
+\-Walk given \hyperlink{struct_parser_state}{\-Parser\-State} and set actual virtual addresses of memory and commands. 
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em parser} & \-State \\
+\hline
+{\em text\-\_\-vaddr} & \-Base virtual address for text segment. \\
+\hline
+{\em bss\-\_\-vaddr} & \-Base virtual address for bss segment. \\
+\hline
+{\em rodata\-\_\-vaddr} & \-Base virtual address for rodata segment. \\
+\hline
+{\em data\-\_\-vaddr} & \-Base virtual address for data segment. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{\-Returns}
+\-Required text segment size. 
+\end{DoxyReturn}
+\hypertarget{spasm__writer_8c_af2213edaf399c678c1db802338333ca6}{
+\index{spasm\-\_\-writer.\-c@{spasm\-\_\-writer.\-c}!write\-\_\-command@{write\-\_\-command}}
+\index{write\-\_\-command@{write\-\_\-command}!spasm_writer.c@{spasm\-\_\-writer.\-c}}
+\subsubsection[{write\-\_\-command}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-Errc} write\-\_\-command (
+\begin{DoxyParamCaption}
+\item[{const {\bf \-Command} $\ast$}]{command, }
+\item[{unsigned char $\ast$$\ast$}]{buffer, }
+\item[{const {\bf \-Spasm\-Builtins} $\ast$}]{builtins}
+\end{DoxyParamCaption}
+)}}
+\label{spasm__writer_8c_af2213edaf399c678c1db802338333ca6}
+
+
+\-Writes the implementation of a given command to the given buffer. 
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em command} & \hyperlink{struct_command}{\-Command} to write \\
+\hline
+{\em buffer} & \-Buffer to write to. \-Will be advanced by command implementation size. \\
+\hline
+{\em builtins} & \-Builtin function addresses. \\
+\hline
+{\em return} & \-E\-R\-R\-\_\-\-S\-U\-C\-C\-E\-S\-S on success. \\
+\hline
+\end{DoxyParams}
+\hypertarget{spasm__writer_8c_aa7d7c6d8c22bb2e09ba3fd2e49bc5aa6}{
+\index{spasm\-\_\-writer.\-c@{spasm\-\_\-writer.\-c}!write\-\_\-program@{write\-\_\-program}}
+\index{write\-\_\-program@{write\-\_\-program}!spasm_writer.c@{spasm\-\_\-writer.\-c}}
+\subsubsection[{write\-\_\-program}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-Errc} write\-\_\-program (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Parser\-State} $\ast$}]{parser, }
+\item[{\-F\-I\-L\-E $\ast$}]{file}
+\end{DoxyParamCaption}
+)}}
+\label{spasm__writer_8c_aa7d7c6d8c22bb2e09ba3fd2e49bc5aa6}
+
+
+\-Writes the program contained in the \hyperlink{struct_parser_state}{\-Parser\-State} as an elf binary into the given file. 
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em file} & \-File handle to write executable to. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{\-Returns}
+\-E\-R\-R\-C\-\_\-\-S\-U\-C\-C\-E\-S\-S in case of success. 
+\end{DoxyReturn}
+\hypertarget{spasm__writer_8c_a5adb72f370ac27c35f85e6798d0af90c}{
+\index{spasm\-\_\-writer.\-c@{spasm\-\_\-writer.\-c}!write\-\_\-spasm\-\_\-readint32@{write\-\_\-spasm\-\_\-readint32}}
+\index{write\-\_\-spasm\-\_\-readint32@{write\-\_\-spasm\-\_\-readint32}!spasm_writer.c@{spasm\-\_\-writer.\-c}}
+\subsubsection[{write\-\_\-spasm\-\_\-readint32}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-Errc} write\-\_\-spasm\-\_\-readint32 (
+\begin{DoxyParamCaption}
+\item[{const uint32\-\_\-t}]{rodata\-\_\-vaddr\-\_\-base, }
+\item[{const uint32\-\_\-t}]{data\-\_\-vaddr\-\_\-base, }
+\item[{unsigned char $\ast$$\ast$}]{buffer}
+\end{DoxyParamCaption}
+)}}
+\label{spasm__writer_8c_a5adb72f370ac27c35f85e6798d0af90c}
+
+
+\-Write the builtin spasm\-\_\-readint32 command to the given buffer. 
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em rodata\-\_\-vaddr\-\_\-base} & \-Base of rodata segment. \\
+\hline
+{\em data\-\_\-vaddr\-\_\-base} & \-Base of data segment. \\
+\hline
+{\em buffer} & \-Buffer to write to. \-Will be advanced by size of command. \\
+\hline
+\end{DoxyParams}
+\hypertarget{spasm__writer_8c_a9f1628d985d0d00336f724af708740ae}{
+\index{spasm\-\_\-writer.\-c@{spasm\-\_\-writer.\-c}!write\-\_\-spasm\-\_\-writeint32@{write\-\_\-spasm\-\_\-writeint32}}
+\index{write\-\_\-spasm\-\_\-writeint32@{write\-\_\-spasm\-\_\-writeint32}!spasm_writer.c@{spasm\-\_\-writer.\-c}}
+\subsubsection[{write\-\_\-spasm\-\_\-writeint32}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-Errc} write\-\_\-spasm\-\_\-writeint32 (
+\begin{DoxyParamCaption}
+\item[{const uint32\-\_\-t}]{data\-\_\-vaddr\-\_\-base, }
+\item[{unsigned char $\ast$$\ast$}]{buffer}
+\end{DoxyParamCaption}
+)}}
+\label{spasm__writer_8c_a9f1628d985d0d00336f724af708740ae}
+
+
+\-Write the builtin spasm\-\_\-writeint32 command to the given buffer. 
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em data\-\_\-vaddr\-\_\-base} & \-Base of data segment. \\
+\hline
+{\em buffer} & \-Buffer to write to. \-Will be advanced by size of command. \\
+\hline
+\end{DoxyParams}
+\hypertarget{spasm__writer_8c_a755f16bbd5c2bef3298e36257f656054}{
+\index{spasm\-\_\-writer.\-c@{spasm\-\_\-writer.\-c}!write\-\_\-text@{write\-\_\-text}}
+\index{write\-\_\-text@{write\-\_\-text}!spasm_writer.c@{spasm\-\_\-writer.\-c}}
+\subsubsection[{write\-\_\-text}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-Errc} write\-\_\-text (
+\begin{DoxyParamCaption}
+\item[{const {\bf \-Parser\-State} $\ast$}]{parser, }
+\item[{unsigned char $\ast$}]{buffer, }
+\item[{const {\bf \-Spasm\-Builtins} $\ast$}]{builtins}
+\end{DoxyParamCaption}
+)}}
+\label{spasm__writer_8c_a755f16bbd5c2bef3298e36257f656054}
+
+
+\-Writes the text segment part of the \hyperlink{struct_parser_state}{\-Parser\-State} into the given buffer. 
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em parser} & \-Parser to write data from. \\
+\hline
+{\em buffer} & \-Buffer to write implementation to. \\
+\hline
+{\em builtins} & \-Builtin function addresses. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{\-Returns}
+\-E\-R\-R\-\_\-\-S\-U\-C\-C\-E\-S\-S on success. 
+\end{DoxyReturn}
+\hypertarget{spasm__writer_8c_a88276a118aa5f959b8ec7437968f6bbe}{
+\index{spasm\-\_\-writer.\-c@{spasm\-\_\-writer.\-c}!write\-\_\-with\-\_\-replacements@{write\-\_\-with\-\_\-replacements}}
+\index{write\-\_\-with\-\_\-replacements@{write\-\_\-with\-\_\-replacements}!spasm_writer.c@{spasm\-\_\-writer.\-c}}
+\subsubsection[{write\-\_\-with\-\_\-replacements}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-Errc} write\-\_\-with\-\_\-replacements (
+\begin{DoxyParamCaption}
+\item[{const unsigned char}]{command\mbox{[}$\,$\mbox{]}, }
+\item[{size\-\_\-t}]{command\-\_\-size, }
+\item[{const uint32\-\_\-t}]{offsets\mbox{[}$\,$\mbox{]}, }
+\item[{const uint32\-\_\-t}]{replacements\mbox{[}$\,$\mbox{]}, }
+\item[{const size\-\_\-t}]{replacement\-\_\-count, }
+\item[{unsigned char $\ast$$\ast$}]{buffer}
+\end{DoxyParamCaption}
+)}}
+\label{spasm__writer_8c_a88276a118aa5f959b8ec7437968f6bbe}
+
+
+\-Write a command wit multiple uint32\-\_\-t replacements. 
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em command} & \hyperlink{struct_command}{\-Command} implementation to write. \\
+\hline
+{\em command\-\_\-size} & command size \\
+\hline
+{\em offsets} & \-Array of offsets in command at which to perform replacements in ascending order. \\
+\hline
+{\em replacements} & \-Replacement values for offsets indexes. \\
+\hline
+{\em replacement\-\_\-count} & \-Number of offsets/replacements. \\
+\hline
+{\em buffer} & \-Buffer to write to. \-Will be advanced by size of command. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{\-Returns}
+\-E\-R\-R\-\_\-\-S\-U\-C\-C\-E\-S\-S on success. 
+\end{DoxyReturn}
+\hypertarget{spasm__writer_8c_ae7a4e5a711f1f37cffbfc7ba4bb9da79}{
+\index{spasm\-\_\-writer.\-c@{spasm\-\_\-writer.\-c}!write\-\_\-with\-\_\-single\-\_\-replacement@{write\-\_\-with\-\_\-single\-\_\-replacement}}
+\index{write\-\_\-with\-\_\-single\-\_\-replacement@{write\-\_\-with\-\_\-single\-\_\-replacement}!spasm_writer.c@{spasm\-\_\-writer.\-c}}
+\subsubsection[{write\-\_\-with\-\_\-single\-\_\-replacement}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-Errc} write\-\_\-with\-\_\-single\-\_\-replacement (
+\begin{DoxyParamCaption}
+\item[{const unsigned char}]{command\mbox{[}$\,$\mbox{]}, }
+\item[{const size\-\_\-t}]{command\-\_\-size, }
+\item[{const size\-\_\-t}]{command\-\_\-data\-\_\-offset, }
+\item[{const uint32\-\_\-t}]{data, }
+\item[{unsigned char $\ast$$\ast$}]{buffer}
+\end{DoxyParamCaption}
+)}}
+\label{spasm__writer_8c_ae7a4e5a711f1f37cffbfc7ba4bb9da79}
+
+
+\-Write a command with a single uint32\-\_\-t replacement. 
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em command} & \hyperlink{struct_command}{\-Command} implementation to write. \\
+\hline
+{\em command\-\_\-size} & command size \\
+\hline
+{\em command\-\_\-data\-\_\-offset} & \-Offset in command at which to perform replacement. \\
+\hline
+{\em data} & \-Data to replace with. \\
+\hline
+{\em buffer} & \-Buffer to write to. \-Will be advanced by size of command. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{\-Returns}
+\-E\-R\-R\-\_\-\-S\-U\-C\-C\-E\-S\-S on success. 
+\end{DoxyReturn}
+\hypertarget{spasm__writer_8c_ad7e2bdf840e8358620b43ce03d67a009}{
+\index{spasm\-\_\-writer.\-c@{spasm\-\_\-writer.\-c}!write\-\_\-xdata@{write\-\_\-xdata}}
+\index{write\-\_\-xdata@{write\-\_\-xdata}!spasm_writer.c@{spasm\-\_\-writer.\-c}}
+\subsubsection[{write\-\_\-xdata}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-Errc} write\-\_\-xdata (
+\begin{DoxyParamCaption}
+\item[{const {\bf \-Parser\-State} $\ast$}]{parser, }
+\item[{unsigned char $\ast$}]{data\-\_\-buffer, }
+\item[{unsigned char $\ast$}]{rodata\-\_\-buffer}
+\end{DoxyParamCaption}
+)}}
+\label{spasm__writer_8c_ad7e2bdf840e8358620b43ce03d67a009}
+
+
+\-Write data/rodata part of \hyperlink{struct_parser_state}{\-Parser\-State} into given buffers. 
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em parser} & \-Parser to write data from. \\
+\hline
+{\em data\-\_\-buffer} & \-Buffer to write data memory location initial content to. \\
+\hline
+{\em rodata\-\_\-buffer} & \-Buffer to write rodata memory location content to. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{\-Returns}
+\-E\-R\-R\-\_\-\-S\-U\-C\-C\-E\-S\-S on success. 
+\end{DoxyReturn}
+
+
+\subsection{\-Variable \-Documentation}
+\hypertarget{spasm__writer_8c_a78ed35ef304dc7b92926bf78a0009e1e}{
+\index{spasm\-\_\-writer.\-c@{spasm\-\_\-writer.\-c}!\-S\-P\-A\-S\-M\-\_\-\-C\-O\-M\-M\-A\-N\-D\-T\-Y\-P\-E\-\_\-\-T\-O\-\_\-\-C\-O\-M\-M\-A\-N\-D@{\-S\-P\-A\-S\-M\-\_\-\-C\-O\-M\-M\-A\-N\-D\-T\-Y\-P\-E\-\_\-\-T\-O\-\_\-\-C\-O\-M\-M\-A\-N\-D}}
+\index{\-S\-P\-A\-S\-M\-\_\-\-C\-O\-M\-M\-A\-N\-D\-T\-Y\-P\-E\-\_\-\-T\-O\-\_\-\-C\-O\-M\-M\-A\-N\-D@{\-S\-P\-A\-S\-M\-\_\-\-C\-O\-M\-M\-A\-N\-D\-T\-Y\-P\-E\-\_\-\-T\-O\-\_\-\-C\-O\-M\-M\-A\-N\-D}!spasm_writer.c@{spasm\-\_\-writer.\-c}}
+\subsubsection[{\-S\-P\-A\-S\-M\-\_\-\-C\-O\-M\-M\-A\-N\-D\-T\-Y\-P\-E\-\_\-\-T\-O\-\_\-\-C\-O\-M\-M\-A\-N\-D}]{\setlength{\rightskip}{0pt plus 5cm}const unsigned char$\ast$ {\bf \-S\-P\-A\-S\-M\-\_\-\-C\-O\-M\-M\-A\-N\-D\-T\-Y\-P\-E\-\_\-\-T\-O\-\_\-\-C\-O\-M\-M\-A\-N\-D}\mbox{[}$\,$\mbox{]}}}
+\label{spasm__writer_8c_a78ed35ef304dc7b92926bf78a0009e1e}
+{\bfseries \-Initial value\-:}
+\begin{DoxyCode}
+ {
+        spasm_add, spasm_mul, spasm_sub, spasm_div,
+
+        spasm_les, spasm_and, spasm_equ, spasm_not,
+
+        spasm_la, spasm_lc, spasm_lv, spasm_str,
+
+        spasm_pri, spasm_rea,
+
+        spasm_jmp, spasm_jin, spasm_nop, spasm_stp,
+
+        0, 0 }
+\end{DoxyCode}
+
+
+\-Command\-Type to \hyperlink{struct_command}{\-Command} implementation mapper. 
+
+\hypertarget{spasm__writer_8c_a12d4acaeb7d224bceb458dca88d230ef}{
+\index{spasm\-\_\-writer.\-c@{spasm\-\_\-writer.\-c}!\-S\-P\-A\-S\-M\-\_\-\-C\-O\-M\-M\-A\-N\-D\-T\-Y\-P\-E\-\_\-\-T\-O\-\_\-\-C\-O\-M\-M\-A\-N\-D\-\_\-\-S\-I\-Z\-E@{\-S\-P\-A\-S\-M\-\_\-\-C\-O\-M\-M\-A\-N\-D\-T\-Y\-P\-E\-\_\-\-T\-O\-\_\-\-C\-O\-M\-M\-A\-N\-D\-\_\-\-S\-I\-Z\-E}}
+\index{\-S\-P\-A\-S\-M\-\_\-\-C\-O\-M\-M\-A\-N\-D\-T\-Y\-P\-E\-\_\-\-T\-O\-\_\-\-C\-O\-M\-M\-A\-N\-D\-\_\-\-S\-I\-Z\-E@{\-S\-P\-A\-S\-M\-\_\-\-C\-O\-M\-M\-A\-N\-D\-T\-Y\-P\-E\-\_\-\-T\-O\-\_\-\-C\-O\-M\-M\-A\-N\-D\-\_\-\-S\-I\-Z\-E}!spasm_writer.c@{spasm\-\_\-writer.\-c}}
+\subsubsection[{\-S\-P\-A\-S\-M\-\_\-\-C\-O\-M\-M\-A\-N\-D\-T\-Y\-P\-E\-\_\-\-T\-O\-\_\-\-C\-O\-M\-M\-A\-N\-D\-\_\-\-S\-I\-Z\-E}]{\setlength{\rightskip}{0pt plus 5cm}const size\-\_\-t {\bf \-S\-P\-A\-S\-M\-\_\-\-C\-O\-M\-M\-A\-N\-D\-T\-Y\-P\-E\-\_\-\-T\-O\-\_\-\-C\-O\-M\-M\-A\-N\-D\-\_\-\-S\-I\-Z\-E}\mbox{[}$\,$\mbox{]}}}
+\label{spasm__writer_8c_a12d4acaeb7d224bceb458dca88d230ef}
+{\bfseries \-Initial value\-:}
+\begin{DoxyCode}
+ {
+        sizeof(spasm_add), sizeof(spasm_mul), sizeof(spasm_sub),
+        sizeof(spasm_div),
+
+        sizeof(spasm_les), sizeof(spasm_and), sizeof(spasm_equ),
+        sizeof(spasm_not),
+
+        sizeof(spasm_la), sizeof(spasm_lc), sizeof(spasm_lv),
+        sizeof(spasm_str),
+
+        sizeof(spasm_pri), sizeof(spasm_rea),
+
+        sizeof(spasm_jmp), sizeof(spasm_jin), sizeof(spasm_nop),
+        sizeof(spasm_stp),
+
+        0, 0 }
+\end{DoxyCode}
+
+
+\-Command\-Type to implementation size mapper. 
+

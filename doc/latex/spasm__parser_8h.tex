@@ -1,0 +1,70 @@
+\hypertarget{spasm__parser_8h}{
+\section{\-S\-:/dev/spasm/spasm\-\_\-parser.h \-File \-Reference}
+\label{spasm__parser_8h}\index{\-S\-:/dev/spasm/spasm\-\_\-parser.\-h@{\-S\-:/dev/spasm/spasm\-\_\-parser.\-h}}
+}
+{\ttfamily \#include $<$stdio.\-h$>$}\*
+{\ttfamily \#include \char`\"{}spasm\-\_\-types.\-h\char`\"{}}\*
+\subsection*{\-Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{spasm__parser_8h_a8cacebd1abf4e3eeb7d9e5cf9263bd39}{init\-\_\-parser} (\hyperlink{struct_parser_state}{\-Parser\-State} $\ast$parser)
+\item 
+\hyperlink{spasm__types_8h_ace0c4399731107108a54bc7b37a1ab60}{\-Errc} \hyperlink{spasm__parser_8h_a481d541e3b97b556dcff14e89cfd8078}{parse\-\_\-file} (\hyperlink{struct_parser_state}{\-Parser\-State} $\ast$parser, \-F\-I\-L\-E $\ast$file)
+\begin{DoxyCompactList}\small\item\em \-Parses the given file updating the given \hyperlink{struct_parser_state}{\-Parser\-State}. \end{DoxyCompactList}\item 
+void \hyperlink{spasm__parser_8h_a8a2e2d797bb2b1315fd6ad32dbcf73fa}{cleanup\-\_\-parser} (\hyperlink{struct_parser_state}{\-Parser\-State} $\ast$parser)
+\begin{DoxyCompactList}\small\item\em \-Releases all memory held in the \hyperlink{struct_parser_state}{\-Parser\-State} and resets it.  \hyperlink{struct_parser_state}{\-Parser\-State} to reset. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{\-Function \-Documentation}
+\hypertarget{spasm__parser_8h_a8a2e2d797bb2b1315fd6ad32dbcf73fa}{
+\index{spasm\-\_\-parser.\-h@{spasm\-\_\-parser.\-h}!cleanup\-\_\-parser@{cleanup\-\_\-parser}}
+\index{cleanup\-\_\-parser@{cleanup\-\_\-parser}!spasm_parser.h@{spasm\-\_\-parser.\-h}}
+\subsubsection[{cleanup\-\_\-parser}]{\setlength{\rightskip}{0pt plus 5cm}void cleanup\-\_\-parser (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Parser\-State} $\ast$}]{parser}
+\end{DoxyParamCaption}
+)}}
+\label{spasm__parser_8h_a8a2e2d797bb2b1315fd6ad32dbcf73fa}
+
+
+\-Releases all memory held in the \hyperlink{struct_parser_state}{\-Parser\-State} and resets it.  \hyperlink{struct_parser_state}{\-Parser\-State} to reset. 
+
+\hypertarget{spasm__parser_8h_a8cacebd1abf4e3eeb7d9e5cf9263bd39}{
+\index{spasm\-\_\-parser.\-h@{spasm\-\_\-parser.\-h}!init\-\_\-parser@{init\-\_\-parser}}
+\index{init\-\_\-parser@{init\-\_\-parser}!spasm_parser.h@{spasm\-\_\-parser.\-h}}
+\subsubsection[{init\-\_\-parser}]{\setlength{\rightskip}{0pt plus 5cm}void init\-\_\-parser (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Parser\-State} $\ast$}]{parser}
+\end{DoxyParamCaption}
+)}}
+\label{spasm__parser_8h_a8cacebd1abf4e3eeb7d9e5cf9263bd39}
+\hypertarget{spasm__parser_8h_a481d541e3b97b556dcff14e89cfd8078}{
+\index{spasm\-\_\-parser.\-h@{spasm\-\_\-parser.\-h}!parse\-\_\-file@{parse\-\_\-file}}
+\index{parse\-\_\-file@{parse\-\_\-file}!spasm_parser.h@{spasm\-\_\-parser.\-h}}
+\subsubsection[{parse\-\_\-file}]{\setlength{\rightskip}{0pt plus 5cm}{\bf \-Errc} parse\-\_\-file (
+\begin{DoxyParamCaption}
+\item[{{\bf \-Parser\-State} $\ast$}]{parser, }
+\item[{\-F\-I\-L\-E $\ast$}]{file}
+\end{DoxyParamCaption}
+)}}
+\label{spasm__parser_8h_a481d541e3b97b556dcff14e89cfd8078}
+
+
+\-Parses the given file updating the given \hyperlink{struct_parser_state}{\-Parser\-State}. 
+
+\begin{DoxyNote}{\-Note}
+\-Make sure to always release the memory allocated in the parser structure using cleanup\-\_\-parser even if the parse\-\_\-file call failed.
+\end{DoxyNote}
+
+\begin{DoxyParams}{\-Parameters}
+{\em parser} & \hyperlink{struct_parser_state}{\-Parser\-State} to update \\
+\hline
+{\em file} & \-File to parse \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{\-Returns}
+\-Error 
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{\-See also}
+\hyperlink{spasm__types_8h_ac77c2d54787a5c0e15f260549ec15c05}{\-Errc\-Code} 
+\end{DoxySeeAlso}
