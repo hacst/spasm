@@ -1,10 +1,10 @@
 C = gcc
 #C = clang
 ifeq ($(mode),release)
-	CFLAGS = -O3 -pedantic -pedantic-errors -Wall -std=c89
+	CFLAGS = -O3 -pedantic -pedantic-errors -Wall -std=c89 -m32
 else
 	mode = debug
-	CFLAGS = -O0 -g3 -pedantic -pedantic-errors -Wall -std=c89
+	CFLAGS = -O0 -g3 -pedantic -pedantic-errors -Wall -std=c89 -m32
 endif
 
 MODULES = spasm
