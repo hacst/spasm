@@ -50,15 +50,14 @@ const unsigned char spasm_and[5] = {
     0x50,                               /* push   eax */
 };
 
-const unsigned char spasm_str[13] = {
+const unsigned char spasm_str[7] = {
                                         /* spasm_str: */
     0x58,                               /* pop    eax */
-    0xbb, 0x4, 0x0, 0x0, 0x0,           /* mov    ebx,0x4 */
-    0x31, 0xd2,                         /* xor    edx,edx */
-    0xf7, 0xe3,                         /* mul    ebx */
+    0xc1, 0xe0, 0x2,                    /* shl    eax,0x2 */
     0x5b,                               /* pop    ebx */
     0x89, 0x18,                         /* mov    DWORD PTR [eax],ebx */
 };
+
 
 const unsigned char spasm_mul[6] = {
                                         /* spasm_mul: */
@@ -98,14 +97,13 @@ const unsigned char spasm_les[12] = {
     0x6a, 0x1,                          /* push   0x1 */
 };
 
-const unsigned char spasm_lv[12] = {
+const unsigned char spasm_lv[6] = {
                                         /* spasm_lv: */
     0x58,                               /* pop    eax */
-    0xbb, 0x4, 0x0, 0x0, 0x0,           /* mov    ebx,0x4 */
-    0x31, 0xd2,                         /* xor    edx,edx */
-    0xf7, 0xe3,                         /* mul    ebx */
+    0xc1, 0xe0, 0x2,                    /* shl    eax,0x2 */
     0xff, 0x30,                         /* push   DWORD PTR [eax] */
 };
+
 
 const unsigned char spasm_sub[5] = {
                                         /* spasm_sub: */
