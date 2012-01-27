@@ -1,10 +1,10 @@
-\hypertarget{spasm_8c}{
-\section{\-S\-:/dev/spasm/spasm.c \-File \-Reference}
-\label{spasm_8c}\index{\-S\-:/dev/spasm/spasm.\-c@{\-S\-:/dev/spasm/spasm.\-c}}
+\hypertarget{spasm_8c}{\section{/home/d0t/dev/spasm/spasm.c \-File \-Reference}
+\label{spasm_8c}\index{/home/d0t/dev/spasm/spasm.\-c@{/home/d0t/dev/spasm/spasm.\-c}}
 }
 {\ttfamily \#include $<$stdio.\-h$>$}\*
 {\ttfamily \#include $<$stdlib.\-h$>$}\*
 {\ttfamily \#include $<$string.\-h$>$}\*
+{\ttfamily \#include $<$sys/stat.\-h$>$}\*
 {\ttfamily \#include \char`\"{}spasm\-\_\-parser.\-h\char`\"{}}\*
 {\ttfamily \#include \char`\"{}spasm\-\_\-writer.\-h\char`\"{}}\*
 {\ttfamily \#include \char`\"{}helpers/elfwrite.\-h\char`\"{}}\*
@@ -22,40 +22,32 @@ int \hyperlink{spasm_8c_a1dfeea39dabf076270426c94def1a2a2}{main} (int argn, char
 
 
 \subsection{\-Function \-Documentation}
-\hypertarget{spasm_8c_a1dfeea39dabf076270426c94def1a2a2}{
-\index{spasm.\-c@{spasm.\-c}!main@{main}}
+\hypertarget{spasm_8c_a1dfeea39dabf076270426c94def1a2a2}{\index{spasm.\-c@{spasm.\-c}!main@{main}}
 \index{main@{main}!spasm.c@{spasm.\-c}}
-\subsubsection[{main}]{\setlength{\rightskip}{0pt plus 5cm}int main (
+\subsubsection[{main}]{\setlength{\rightskip}{0pt plus 5cm}int {\bf main} (
 \begin{DoxyParamCaption}
 \item[{int}]{argn, }
 \item[{char $\ast$$\ast$}]{argv}
 \end{DoxyParamCaption}
-)}}
-\label{spasm_8c_a1dfeea39dabf076270426c94def1a2a2}
-\hypertarget{spasm_8c_a5d0271ae244101c822d432392d6a9c21}{
-\index{spasm.\-c@{spasm.\-c}!print\-\_\-cmd@{print\-\_\-cmd}}
+)}}\label{spasm_8c_a1dfeea39dabf076270426c94def1a2a2}
+\hypertarget{spasm_8c_a5d0271ae244101c822d432392d6a9c21}{\index{spasm.\-c@{spasm.\-c}!print\-\_\-cmd@{print\-\_\-cmd}}
 \index{print\-\_\-cmd@{print\-\_\-cmd}!spasm.c@{spasm.\-c}}
-\subsubsection[{print\-\_\-cmd}]{\setlength{\rightskip}{0pt plus 5cm}void print\-\_\-cmd (
+\subsubsection[{print\-\_\-cmd}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf print\-\_\-cmd} (
 \begin{DoxyParamCaption}
 \item[{{\bf \-Command} $\ast$}]{cmd}
 \end{DoxyParamCaption}
-)}}
-\label{spasm_8c_a5d0271ae244101c822d432392d6a9c21}
-\hypertarget{spasm_8c_a818f388d4ba16f1fb2a9ceae8303e49a}{
-\index{spasm.\-c@{spasm.\-c}!print\-\_\-info@{print\-\_\-info}}
+)}}\label{spasm_8c_a5d0271ae244101c822d432392d6a9c21}
+\hypertarget{spasm_8c_a818f388d4ba16f1fb2a9ceae8303e49a}{\index{spasm.\-c@{spasm.\-c}!print\-\_\-info@{print\-\_\-info}}
 \index{print\-\_\-info@{print\-\_\-info}!spasm.c@{spasm.\-c}}
-\subsubsection[{print\-\_\-info}]{\setlength{\rightskip}{0pt plus 5cm}void print\-\_\-info (
+\subsubsection[{print\-\_\-info}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf print\-\_\-info} (
 \begin{DoxyParamCaption}
 \item[{const {\bf \-Parser\-State} $\ast$}]{parser}
 \end{DoxyParamCaption}
-)}}
-\label{spasm_8c_a818f388d4ba16f1fb2a9ceae8303e49a}
-\hypertarget{spasm_8c_a120fec5c70bad673e9b1c2e91b28fe5f}{
-\index{spasm.\-c@{spasm.\-c}!print\-\_\-usage@{print\-\_\-usage}}
+)}}\label{spasm_8c_a818f388d4ba16f1fb2a9ceae8303e49a}
+\hypertarget{spasm_8c_a120fec5c70bad673e9b1c2e91b28fe5f}{\index{spasm.\-c@{spasm.\-c}!print\-\_\-usage@{print\-\_\-usage}}
 \index{print\-\_\-usage@{print\-\_\-usage}!spasm.c@{spasm.\-c}}
-\subsubsection[{print\-\_\-usage}]{\setlength{\rightskip}{0pt plus 5cm}void print\-\_\-usage (
+\subsubsection[{print\-\_\-usage}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf print\-\_\-usage} (
 \begin{DoxyParamCaption}
 \item[{const char $\ast$}]{name}
 \end{DoxyParamCaption}
-)}}
-\label{spasm_8c_a120fec5c70bad673e9b1c2e91b28fe5f}
+)}}\label{spasm_8c_a120fec5c70bad673e9b1c2e91b28fe5f}

@@ -1,10 +1,23 @@
-C = gcc
-#C = clang
+
+ifeq ($(tool), clang)
+	C = clang
+else
+	C = gcc
+endif
+
+ifeq ($(arch), 32)
+	ARCHFLAG = -m32
+else ifeq ($(arch), 64)
+	ARCHFLAG = -m64
+else
+	ARCHFLAG =
+endif
+
 ifeq ($(mode),release)
-	CFLAGS = -O3 -pedantic -pedantic-errors -Wall -std=c89 -m32
+	CFLAGS = -O3 -pedantic -pedantic-errors -Wall -std=c89 $(ARCHFLAG)
 else
 	mode = debug
-	CFLAGS = -O0 -g3 -pedantic -pedantic-errors -Wall -std=c89 -m32
+	CFLAGS = -O0 -g3 -pedantic -pedantic-errors -Wall -std=c89 $(ARCHFLAG)
 endif
 
 MODULES = spasm

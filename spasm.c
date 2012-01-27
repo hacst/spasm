@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 
 #include "spasm_parser.h"
 #include "spasm_writer.h"
@@ -154,6 +155,14 @@ int main(int argn, char **argv)
         printf("FAILED\n");
         fprintf(stderr, "Failed to open target file \"%s\"\n", argv[2]);
         return EXIT_FAILURE;
+    }
+
+    /* Set 755 permissions on target file */
+    if(chmod(argv[2], S_IXUSR | S_IRUSR | S_IWUSR |
+    				  S_IXGRP | S_IRGRP |
+    				  S_IXOTH | S_IROTH) != 0)
+    {
+    	fprintf(stderr, "Failed to set executable flag on target file.\n");
     }
 
     result = write_program(&parser, target);

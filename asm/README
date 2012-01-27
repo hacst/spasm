@@ -1,0 +1,42 @@
+Spasm uses one-to-one mappings between its command types and
+predefines binary sequences to generate its output binary.
+These binary sequences are generated from a set of hand-written
+NASM assembly files:
+
+commands.asm - contains the implementation of every command
+supported in the assembly dialect spasm works on.
+
+int32io.asm - contains helper functions for reading and writing
+int32 numbers to stdout or from stdin. Those helpers are used
+by commands in commands.asm
+
+Note that all commands in those files have to use either relative
+addressing or special handling inside of spasm as their placement
+in the binary spasm generates can not be known in advance (same
+goes for calls to helper functions from commands.asm). Make sure
+not to use any non-relative variable length commands as these
+can not be correctly rewritten in spasm.
+
+To assemble any of those files use the ldnasm helper script. E.g:
+$ ./ldnasm commands.asm
+
+This will produce a binary of the same name as the given assembly
+file without the extension. You can then use the sections2shell.py
+helper script to extract usable bytecode sequences in the form of
+C89 arrays from the binary. E.g.:
+$ objdump -D -Mintel | ./sections2shell.py --header
+$ objdump -D -Mintel | ./sections2shell.py
+
+Alternatively you can use the asm2c.sh helper script that will
+call ldnasm and sections2shell for you. E.g.
+$ ./asm2c.sh commands.asm
+
+The sequences used in spasm can be found in the spasm_commands.c
+file while their header declarations are located in spasm_commands.h.
+
+If a command uses non-relative addressing changes to the command
+implementations might require changes in the corresponding
+address rewriting performed in spasm_writer.c. This rewriting
+relies on hard-coded offsets into the bytestream as well as
+hard-coded knowlegde on what to overwrite in those positions.
+

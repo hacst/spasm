@@ -1,6 +1,5 @@
-\hypertarget{elfwrite_8c}{
-\section{\-S\-:/dev/spasm/helpers/elfwrite.c \-File \-Reference}
-\label{elfwrite_8c}\index{\-S\-:/dev/spasm/helpers/elfwrite.\-c@{\-S\-:/dev/spasm/helpers/elfwrite.\-c}}
+\hypertarget{elfwrite_8c}{\section{/home/d0t/dev/spasm/helpers/elfwrite.c \-File \-Reference}
+\label{elfwrite_8c}\index{/home/d0t/dev/spasm/helpers/elfwrite.\-c@{/home/d0t/dev/spasm/helpers/elfwrite.\-c}}
 }
 {\ttfamily \#include \char`\"{}elfwrite.\-h\char`\"{}}\*
 {\ttfamily \#include $<$elf.\-h$>$}\*
@@ -20,10 +19,9 @@ void \hyperlink{elfwrite_8c_a9191215780029146cb086180d2448de1}{elf\-\_\-optimize
 
 
 \subsection{\-Function \-Documentation}
-\hypertarget{elfwrite_8c_a9191215780029146cb086180d2448de1}{
-\index{elfwrite.\-c@{elfwrite.\-c}!elf\-\_\-optimize\-\_\-alignment@{elf\-\_\-optimize\-\_\-alignment}}
+\hypertarget{elfwrite_8c_a9191215780029146cb086180d2448de1}{\index{elfwrite.\-c@{elfwrite.\-c}!elf\-\_\-optimize\-\_\-alignment@{elf\-\_\-optimize\-\_\-alignment}}
 \index{elf\-\_\-optimize\-\_\-alignment@{elf\-\_\-optimize\-\_\-alignment}!elfwrite.c@{elfwrite.\-c}}
-\subsubsection[{elf\-\_\-optimize\-\_\-alignment}]{\setlength{\rightskip}{0pt plus 5cm}void elf\-\_\-optimize\-\_\-alignment (
+\subsubsection[{elf\-\_\-optimize\-\_\-alignment}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf elf\-\_\-optimize\-\_\-alignment} (
 \begin{DoxyParamCaption}
 \item[{uint32\-\_\-t}]{base\-\_\-vaddr, }
 \item[{uint32\-\_\-t}]{text\-\_\-size, }
@@ -34,8 +32,7 @@ void \hyperlink{elfwrite_8c_a9191215780029146cb086180d2448de1}{elf\-\_\-optimize
 \item[{uint32\-\_\-t $\ast$}]{data\-\_\-vaddr, }
 \item[{uint32\-\_\-t $\ast$}]{bss\-\_\-vaddr}
 \end{DoxyParamCaption}
-)}}
-\label{elfwrite_8c_a9191215780029146cb086180d2448de1}
+)}}\label{elfwrite_8c_a9191215780029146cb086180d2448de1}
 
 
 \-Return a set of addresses for the required sizes that prevent padding from being required in files written with elf\-\_\-write. 
@@ -59,10 +56,9 @@ void \hyperlink{elfwrite_8c_a9191215780029146cb086180d2448de1}{elf\-\_\-optimize
 {\em bss\-\_\-vaddr} & \-Target variable for optimal bss vaddr. \\
 \hline
 \end{DoxyParams}
-\hypertarget{elfwrite_8c_afa5f687c8a7afd293868c7b88522879f}{
-\index{elfwrite.\-c@{elfwrite.\-c}!elf\-\_\-write@{elf\-\_\-write}}
+\hypertarget{elfwrite_8c_afa5f687c8a7afd293868c7b88522879f}{\index{elfwrite.\-c@{elfwrite.\-c}!elf\-\_\-write@{elf\-\_\-write}}
 \index{elf\-\_\-write@{elf\-\_\-write}!elfwrite.c@{elfwrite.\-c}}
-\subsubsection[{elf\-\_\-write}]{\setlength{\rightskip}{0pt plus 5cm}void elf\-\_\-write (
+\subsubsection[{elf\-\_\-write}]{\setlength{\rightskip}{0pt plus 5cm}void {\bf elf\-\_\-write} (
 \begin{DoxyParamCaption}
 \item[{\-F\-I\-L\-E $\ast$}]{file, }
 \item[{uint32\-\_\-t}]{entry\-\_\-point, }
@@ -78,8 +74,7 @@ void \hyperlink{elfwrite_8c_a9191215780029146cb086180d2448de1}{elf\-\_\-optimize
 \item[{uint32\-\_\-t}]{bss\-\_\-vaddr, }
 \item[{size\-\_\-t}]{bss\-\_\-size}
 \end{DoxyParamCaption}
-)}}
-\label{elfwrite_8c_afa5f687c8a7afd293868c7b88522879f}
+)}}\label{elfwrite_8c_afa5f687c8a7afd293868c7b88522879f}
 
 
 \-Writes an \-E\-L\-F executable with the given parameters to the given file. 
@@ -113,17 +108,15 @@ void \hyperlink{elfwrite_8c_a9191215780029146cb086180d2448de1}{elf\-\_\-optimize
 {\em bss\-\_\-size} & \-Size to reserve for the zero initialized data \\
 \hline
 \end{DoxyParams}
-\hypertarget{elfwrite_8c_a68d128cf34998158337cba918d2a0546}{
-\index{elfwrite.\-c@{elfwrite.\-c}!padding\-\_\-for@{padding\-\_\-for}}
+\hypertarget{elfwrite_8c_a68d128cf34998158337cba918d2a0546}{\index{elfwrite.\-c@{elfwrite.\-c}!padding\-\_\-for@{padding\-\_\-for}}
 \index{padding\-\_\-for@{padding\-\_\-for}!elfwrite.c@{elfwrite.\-c}}
-\subsubsection[{padding\-\_\-for}]{\setlength{\rightskip}{0pt plus 5cm}uint32\-\_\-t padding\-\_\-for (
+\subsubsection[{padding\-\_\-for}]{\setlength{\rightskip}{0pt plus 5cm}uint32\-\_\-t {\bf padding\-\_\-for} (
 \begin{DoxyParamCaption}
 \item[{const uint32\-\_\-t}]{addr, }
 \item[{const uint32\-\_\-t}]{reference, }
 \item[{const uint32\-\_\-t}]{alignment}
 \end{DoxyParamCaption}
-)}}
-\label{elfwrite_8c_a68d128cf34998158337cba918d2a0546}
+)}}\label{elfwrite_8c_a68d128cf34998158337cba918d2a0546}
 
 
 \-Creates a padding for the given addr. that ensures that (addr. + padding -\/ reference) \% alignment == 0. 
@@ -137,13 +130,11 @@ void \hyperlink{elfwrite_8c_a9191215780029146cb086180d2448de1}{elf\-\_\-optimize
 {\em alignment} & \-Alignment (\-Must be bigger 0 and power of two) \\
 \hline
 \end{DoxyParams}
-\hypertarget{elfwrite_8c_a4460fedfea09efe4e8d2b4b74c8c9cc0}{
-\index{elfwrite.\-c@{elfwrite.\-c}!write\-\_\-padding@{write\-\_\-padding}}
+\hypertarget{elfwrite_8c_a4460fedfea09efe4e8d2b4b74c8c9cc0}{\index{elfwrite.\-c@{elfwrite.\-c}!write\-\_\-padding@{write\-\_\-padding}}
 \index{write\-\_\-padding@{write\-\_\-padding}!elfwrite.c@{elfwrite.\-c}}
-\subsubsection[{write\-\_\-padding}]{\setlength{\rightskip}{0pt plus 5cm}size\-\_\-t write\-\_\-padding (
+\subsubsection[{write\-\_\-padding}]{\setlength{\rightskip}{0pt plus 5cm}size\-\_\-t {\bf write\-\_\-padding} (
 \begin{DoxyParamCaption}
 \item[{const size\-\_\-t}]{size, }
 \item[{\-F\-I\-L\-E $\ast$}]{file}
 \end{DoxyParamCaption}
-)}}
-\label{elfwrite_8c_a4460fedfea09efe4e8d2b4b74c8c9cc0}
+)}}\label{elfwrite_8c_a4460fedfea09efe4e8d2b4b74c8c9cc0}
